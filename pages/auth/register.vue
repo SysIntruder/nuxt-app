@@ -34,22 +34,40 @@ const state = reactive({
                     <UInput v-model="state.username" icon="i-heroicons-user" placeholder="john.doe" />
                 </UFormGroup>
                 <UFormGroup label="Password" name="password" required class="my-2">
-                    <UInput v-model="state.password" :type="showPassword ? 'text' : 'password'"
-                        icon="i-heroicons-lock-closed" placeholder="********" :ui="{ icon: { trailing: { pointer: '' } } }">
+                    <UInput
+                        v-model="state.password"
+                        :type="showPassword ? 'text' : 'password'"
+                        icon="i-heroicons-lock-closed"
+                        placeholder="********"
+                        :ui="{ icon: { trailing: { pointer: '' } } }"
+                    >
                         <template #trailing>
-                            <UButton color="gray" variant="link"
-                                :icon="showPassword ? `i-heroicons-eye-slash` : `i-heroicons-eye`" :padded="false"
-                                @click="showPassword = !showPassword" />
+                            <UButton
+                                color="gray"
+                                variant="link"
+                                :icon="showPassword ? `i-heroicons-eye-slash` : `i-heroicons-eye`"
+                                :padded="false"
+                                @click="showPassword = !showPassword"
+                            />
                         </template>
                     </UInput>
                 </UFormGroup>
                 <UFormGroup label="Confirm Password" name="confirmPassword" required class="my-2">
-                    <UInput v-model="state.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
-                        icon="i-heroicons-lock-closed" placeholder="********" :ui="{ icon: { trailing: { pointer: '' } } }">
+                    <UInput
+                        v-model="state.confirmPassword"
+                        :type="showConfirmPassword ? 'text' : 'password'"
+                        icon="i-heroicons-lock-closed"
+                        placeholder="********"
+                        :ui="{ icon: { trailing: { pointer: '' } } }"
+                    >
                         <template #trailing>
-                            <UButton color="gray" variant="link"
-                                :icon="showConfirmPassword ? `i-heroicons-eye-slash` : `i-heroicons-eye`" :padded="false"
-                                @click="showConfirmPassword = !showConfirmPassword" />
+                            <UButton
+                                color="gray"
+                                variant="link"
+                                :icon="showConfirmPassword ? `i-heroicons-eye-slash` : `i-heroicons-eye`"
+                                :padded="false"
+                                @click="showConfirmPassword = !showConfirmPassword"
+                            />
                         </template>
                     </UInput>
                 </UFormGroup>
@@ -59,9 +77,12 @@ const state = reactive({
                 <span class="opacity-75">
                     Already have an account?
                 </span>
-                <ULink to="/auth/login" active-class="text-primary"
+                <ULink
+                    to="/auth/login"
+                    active-class="text-primary"
                     inactive-class="text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-200"
-                    class="font-medium">
+                    class="font-medium"
+                >
                     Login
                 </ULink>
             </div>

@@ -34,12 +34,15 @@ const search = ref(null)
 
 <template>
     <div class="flex p-2 h-[100vh] bg-slate-50 dark:bg-slate-950">
-        <div class="py-2 px-4 mr-2 rounded-sm bg-slate-50 dark:bg-slate-900 transition-all" :class="{
-            'min-w-[12vw]': !sidenavCollapsed,
-            'transition-expand-sidenav': !sidenavCollapsed,
-            'min-w-[72px]': sidenavCollapsed,
-            'transition-collapse-sidenav': sidenavCollapsed
-        }">
+        <div
+            class="py-2 px-4 mr-2 rounded-sm bg-slate-50 dark:bg-slate-900 transition-all"
+            :class="{
+                'min-w-[12vw]': !sidenavCollapsed,
+                'transition-expand-sidenav': !sidenavCollapsed,
+                'min-w-[72px]': sidenavCollapsed,
+                'transition-collapse-sidenav': sidenavCollapsed
+            }"
+        >
             <div class="flex flex-col justify-between h-full">
                 <div>
                     <div :class="`flex ${sidenavCollapsed ? 'justify-center' : 'justify-between'} items-center my-4`">
@@ -59,8 +62,13 @@ const search = ref(null)
         <div class="flex flex-col w-full">
             <div class="flex items-center justify-between py-2 px-4 rounded-sm bg-slate-50 dark:bg-slate-900">
                 <div class="flex items-center gap-2">
-                    <UButton icon="i-heroicons-bars-3" color="gray" padded variant="link" :ui="{ rounded: 'rounded-full' }"
-                        @click="sidenavCollapsed = !sidenavCollapsed" />
+                    <UButton
+                        icon="i-heroicons-bars-3"
+                        color="gray"
+                        padded variant="link"
+                        :ui="{ rounded: 'rounded-full' }"
+                        @click="sidenavCollapsed = !sidenavCollapsed"
+                    />
                     <FallbackLogoText />
                 </div>
                 <div class="flex items-center gap-2">
