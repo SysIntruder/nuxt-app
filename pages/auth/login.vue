@@ -1,15 +1,36 @@
 <script setup>
 import { reactive } from 'vue';
 
+useHead({
+  title: 'Login'
+})
 definePageMeta({
     layout: 'auth'
 })
 
+const toast = useToast()
 const showPassword = ref(false)
 const state = reactive({
     username: undefined,
     password: undefined,
 })
+
+const validate = (state) => {
+    const errors = []
+    if (!state.username) errors.push({ path: 'username', message: 'Required' })
+    if (!state.password) errors.push({ path: 'password', message: 'Required' })
+
+    return errors
+}
+
+function onSubmit(evt) {
+    toast.add({
+        title: 'You\'re Logged In!',
+        description: 'Welcome, ' + evt.data.username,
+        timeout: 2000,
+        callback: () => navigateTo({ path: '/dashboard' }),
+    })
+}
 </script>
 
 <template>
@@ -24,7 +45,7 @@ const state = reactive({
         </div>
 
         <div class="mt-10">
-            <UForm :state="state">
+            <UForm :state="state" :validate="validate" @submit="onSubmit">
                 <UFormGroup label="Username" name="username" required class="mb-2">
                     <UInput v-model="state.username" icon="i-heroicons-user" placeholder="john.doe" />
                 </UFormGroup>

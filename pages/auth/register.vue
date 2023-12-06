@@ -1,6 +1,9 @@
 <script setup>
 import { reactive } from 'vue';
 
+useHead({
+  title: 'Register'
+})
 definePageMeta({
     layout: 'auth'
 })
