@@ -1,4 +1,17 @@
 <script setup>
+const sidenavCollapsed = ref(false)
+const search = ref(null)
+
+const colorMode = useColorMode()
+const isDark = computed({
+    get () {
+        return colorMode.value === 'dark'
+    },
+    set () {
+        colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+    },
+})
+
 const navLinks = [
     [
         { label: 'Dashboard', icon: 'i-heroicons-squares-2x2', to: '/dashboard' },
@@ -11,31 +24,29 @@ const navLinks = [
         { label: 'Stores', icon: 'i-heroicons-building-storefront', to: '' },
         { label: 'Discounts', icon: 'i-heroicons-banknotes', to: '' },
     ], [
-        { label: 'Log Activities', icon: 'i-heroicons-clock', to: '' },
+        { label: 'Activity Log', icon: 'i-heroicons-clock', to: '' },
         { label: 'Settings', icon: 'i-heroicons-cog-6-tooth', to: '' },
         { label: 'Help', icon: 'i-heroicons-lifebuoy', to: '' },
     ]
 ]
-const profileLinks = [
+const profileItems = [
     [
+        { label: 'Logged In User', sublabel: 'user\'s role', avatar: 'https://avatars.githubusercontent.com/u/80736513?v=4', slot: 'account', disabled: true }
+    ],[
         { label: 'Your Profile', icon: 'i-heroicons-user-circle', to: '' },
+        { label: 'Add Account', icon: 'i-heroicons-user-plus', to: '' },
     ], [
-        { label: 'Dark Mode', icon: 'i-heroicons-moon', to: '' },
-        { label: 'Language', icon: 'i-heroicons-language', to: '' },
+        { label: 'Try Enterprise', icon: 'i-heroicons-globe-alt', to: '', slot: 'special' },
     ], [
-        { label: 'Logout', to: '' },
+        { label: 'Logout', to: '/auth/login' },
     ]
 ]
-
-const sidenavCollapsed = ref(false)
-const search = ref(null)
-
 </script>
 
 <template>
-    <div class="flex p-2 h-[100vh] bg-slate-50 dark:bg-slate-950">
+    <div class="flex p-2 h-[100vh] bg-gray-100 dark:bg-gray-950">
         <div
-            class="py-2 px-4 mr-2 rounded-sm bg-slate-50 dark:bg-slate-900 transition-all"
+            class="py-2 px-4 mr-2 rounded-sm bg-gray-50 dark:bg-gray-900 transition-all"
             :class="{
                 'min-w-[12vw]': !sidenavCollapsed,
                 'transition-expand-sidenav': !sidenavCollapsed,
@@ -60,7 +71,7 @@ const search = ref(null)
         </div>
 
         <div class="flex flex-col w-full">
-            <div class="flex items-center justify-between py-2 px-4 rounded-sm bg-slate-50 dark:bg-slate-900">
+            <div class="flex items-center justify-between py-2 px-4 rounded-sm bg-gray-50 dark:bg-gray-900">
                 <div class="flex items-center gap-2">
                     <UButton
                         icon="i-heroicons-bars-3"
@@ -74,25 +85,50 @@ const search = ref(null)
                 <div class="flex items-center gap-2">
                     <UInput v-model="search" icon="i-heroicons-magnifying-glass" placeholder="Search..." />
                     <UButton icon="i-heroicons-bell" color="gray" variant="link" :ui="{ rounded: 'rounded-full' }" />
-                    <UPopover>
-                        <UButton color="gray" trailing-icon="i-heroicons-chevron-down" variant="link">
+                    <UTooltip
+                        :text="`Switch to ${isDark ? 'Light' : 'Dark'} Mode`"
+                        class="text-md"
+                    >
+                        <UButton
+                            :icon="isDark ? 'i-heroicons-moon' : 'i-heroicons-sun'"
+                            color="gray"
+                            variant="link"
+                            :ui="{ rounded: 'rounded-full' }"
+                            @click="isDark = !isDark"
+                        />
+                    </UTooltip>
+                    <UButton icon="i-heroicons-language" color="gray" variant="link" :ui="{ rounded: 'rounded-full' }" />
+                    <UDropdown
+                        :items="profileItems"
+                        :ui="{ item: { disabled: 'cursor-text select-text opacity-1' } }"
+                        :popper="{ placement: 'bottom-start' }"
+                    >
+                        <UButton color="gray" trailing-icon="i-heroicons-chevron-down" variant="ghost">
                             <template #leading>
                                 <UAvatar src="https://avatars.githubusercontent.com/u/80736513?v=4" size="sm" />
                             </template>
                         </UButton>
-                        <template #panel>
-                            <div class="p-2">
-                                <div class="flex justify-between items-center text-sm font-semibold py-2 pr-12">
-                                    <UAvatar src="https://avatars.githubusercontent.com/u/80736513?v=4" class="mr-2" />
-                                    <div class="flex flex-col">
-                                        Logged In User
-                                        <span class="text-xs font-normal opacity-75">user's role</span>
-                                    </div>
+                        <template #account="{item}">
+                            <div class="flex justify-between items-center text-sm text-left font-semibold">
+                                <UAvatar :src="item.avatar" class="mr-2" />
+                                <div class="flex flex-col">
+                                    <p class="truncate font-medium text-gray-900 dark:text-white">
+                                        {{ item.label }}
+                                    </p>
+                                    <span class="text-xs font-normal opacity-75">{{ item.sublabel }}</span>
                                 </div>
-                                <LayoutsProfilenav :links="profileLinks" />
                             </div>
                         </template>
-                    </UPopover>
+                        <template #special="{item}">
+                            <div class="flex justify-between items-center w-full">
+                                <div class="flex items-center gap-2">
+                                    <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4" />
+                                    <span class="truncate">{{ item.label }}</span>
+                                </div>
+                                <UIcon name="i-heroicons-sparkles-solid" class="h-5 w-5 text-yellow-400 dark:text-yellow-300" />
+                            </div>
+                        </template>
+                    </UDropdown>
                 </div>
             </div>
             <div class="p-4">

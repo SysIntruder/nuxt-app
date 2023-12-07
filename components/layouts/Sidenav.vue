@@ -12,20 +12,23 @@ const props = defineProps(['links', 'collapsed'])
                 :key="`nav-${linkId}-${lId}`"
                 :text="l.label"
                 :popper="{ placement: 'right' }"
-                class="text-sm"
+                class="text-md"
             >
                 <UButton
                     :to="l.to"
-                    color="gray"
-                    :active-class="[
-                        'text-primary-500 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-400',
-                        'bg-primary-300/50 dark:bg-primary-800/50 hover:bg-primary-300/50 dark:hover:bg-primary-800/50'
-                    ]"
-                    :class="[
-                        'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white',
-                        'bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800/50'
-                    ]"
                     class="px-3 py-2 my-1"
+                    :class="[
+                        'text-gray-500 dark:text-gray-500',
+                        'hover:text-gray-900 dark:hover:text-white',
+                        'bg-gray-50 dark:bg-gray-900',
+                        'hover:bg-gray-200/50 dark:hover:bg-gray-800/50',
+                    ]"
+                    :active-class="[
+                        'text-primary-500 dark:text-primary-400',
+                        'hover:!text-primary-500 dark:hover:!text-primary-400',
+                        'bg-primary-300/50 dark:bg-primary-800/50',
+                        'hover:!bg-primary-300/50 dark:hover:!bg-primary-800/50',
+                    ]"
                     variant="ghost"
                 >
                     <template #leading>
