@@ -1,4 +1,4 @@
-export default defineEventHandler((event) => {
+export default defineEventHandler((_) => {
   return [
     [
       { label: 'Dashboard', icon: 'i-heroicons-squares-2x2', to: '/dashboard' },

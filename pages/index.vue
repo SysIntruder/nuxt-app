@@ -2,4 +2,6 @@
 navigateTo({ path: '/auth/login' })
 </script>
 
-<template />
+<template>
+  <div />
+</template>
