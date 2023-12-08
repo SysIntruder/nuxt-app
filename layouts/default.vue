@@ -4,125 +4,125 @@ const search = ref(null)
 
 const colorMode = useColorMode()
 const isDark = computed({
-    get () {
-        return colorMode.value === 'dark'
-    },
-    set () {
-        colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-    },
+  get() {
+    return colorMode.value === 'dark'
+  },
+  set() {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  },
 })
 
 const { data: { value: navLinks } } = await useFetch('/api/menu')
 const profileItems = [
-    [{
-        label: 'Logged In User',
-        sublabel: 'user\'s role',
-        avatar: 'https://avatars.githubusercontent.com/u/80736513?v=4',
-        slot: 'account',
-        disabled: true
-    }],
-    [
-        { label: 'Your Profile', icon: 'i-heroicons-user-circle', to: '' },
-        { label: 'Add Account', icon: 'i-heroicons-user-plus', to: '' },
-    ],
-    [{ label: 'Try Enterprise', icon: 'i-heroicons-globe-alt', to: '', slot: 'special' }],
-    [{ label: 'Logout', to: '/auth/login' }]
+  [{
+    label: 'Logged In User',
+    sublabel: 'user\'s role',
+    avatar: 'https://avatars.githubusercontent.com/u/80736513?v=4',
+    slot: 'account',
+    disabled: true,
+  }],
+  [
+    { label: 'Your Profile', icon: 'i-heroicons-user-circle', to: '' },
+    { label: 'Add Account', icon: 'i-heroicons-user-plus', to: '' },
+  ],
+  [{ label: 'Try Enterprise', icon: 'i-heroicons-globe-alt', to: '', slot: 'special' }],
+  [{ label: 'Logout', to: '/auth/login' }],
 ]
 </script>
 
 <template>
-    <div class="flex p-2 h-[100vh] bg-gray-100 dark:bg-gray-950">
-        <div
-            class="py-2 px-4 mr-2 rounded-sm bg-gray-50 dark:bg-gray-900 transition-all"
-            :class="{
-                'min-w-[12vw]': !sidenavCollapsed,
-                'transition-expand-sidenav': !sidenavCollapsed,
-                'min-w-[72px]': sidenavCollapsed,
-                'transition-collapse-sidenav': sidenavCollapsed
-            }"
-        >
-            <div class="flex flex-col justify-between h-full">
-                <div>
-                    <div :class="`flex ${sidenavCollapsed ? 'justify-center' : 'justify-between'} items-center my-4`">
-                        <FallbackLogo />
-                        <span v-if="!sidenavCollapsed" class="text-xs opacity-75">v1.0.0</span>
-                    </div>
-                    <LayoutsSidenav :links="navLinks" :collapsed="sidenavCollapsed" />
-                </div>
-                <div class="text-xs text-center opacity-75">
-                    <span v-if="!sidenavCollapsed">
-                        &copy; 2023 NuxtApp.
-                    </span>
-                </div>
-            </div>
+  <div class="flex p-2 h-[100vh] bg-gray-100 dark:bg-gray-950">
+    <div
+      class="py-2 px-4 mr-2 rounded-sm bg-gray-50 dark:bg-gray-900 transition-all"
+      :class="{
+        'min-w-[12vw]': !sidenavCollapsed,
+        'transition-expand-sidenav': !sidenavCollapsed,
+        'min-w-[72px]': sidenavCollapsed,
+        'transition-collapse-sidenav': sidenavCollapsed,
+      }"
+    >
+      <div class="flex flex-col justify-between h-full">
+        <div>
+          <div :class="`flex ${sidenavCollapsed ? 'justify-center' : 'justify-between'} items-center my-4`">
+            <FallbackLogo />
+            <span v-if="!sidenavCollapsed" class="text-xs opacity-75">v1.0.0</span>
+          </div>
+          <LayoutsSidenav :links="navLinks" :collapsed="sidenavCollapsed" />
         </div>
-
-        <div class="flex flex-col w-full">
-            <div class="flex items-center justify-between py-2 px-4 rounded-sm bg-gray-50 dark:bg-gray-900">
-                <div class="flex items-center gap-2">
-                    <UButton
-                        icon="i-heroicons-bars-3"
-                        color="gray"
-                        padded variant="link"
-                        :ui="{ rounded: 'rounded-full' }"
-                        @click="sidenavCollapsed = !sidenavCollapsed"
-                    />
-                    <FallbackLogoText />
-                </div>
-                <div class="flex items-center gap-2">
-                    <UInput v-model="search" icon="i-heroicons-magnifying-glass" placeholder="Search..." />
-                    <UButton icon="i-heroicons-bell" color="gray" variant="link" :ui="{ rounded: 'rounded-full' }" />
-                    <UTooltip
-                        :text="`Switch to ${isDark ? 'Light' : 'Dark'} Mode`"
-                        class="text-md"
-                    >
-                        <UButton
-                            :icon="isDark ? 'i-heroicons-moon' : 'i-heroicons-sun'"
-                            color="gray"
-                            variant="link"
-                            :ui="{ rounded: 'rounded-full' }"
-                            @click="isDark = !isDark"
-                        />
-                    </UTooltip>
-                    <UButton icon="i-heroicons-language" color="gray" variant="link" :ui="{ rounded: 'rounded-full' }" />
-                    <UDropdown
-                        :items="profileItems"
-                        :ui="{ item: { disabled: 'cursor-text select-text opacity-1' } }"
-                        :popper="{ placement: 'bottom-start' }"
-                    >
-                        <UButton color="gray" trailing-icon="i-heroicons-chevron-down" variant="ghost">
-                            <template #leading>
-                                <UAvatar src="https://avatars.githubusercontent.com/u/80736513?v=4" size="sm" />
-                            </template>
-                        </UButton>
-                        <template #account="{item}">
-                            <div class="flex justify-between items-center text-sm text-left font-semibold">
-                                <UAvatar :src="item.avatar" class="mr-2" />
-                                <div class="flex flex-col">
-                                    <p class="truncate font-medium text-gray-900 dark:text-white">
-                                        {{ item.label }}
-                                    </p>
-                                    <span class="text-xs font-normal opacity-75">{{ item.sublabel }}</span>
-                                </div>
-                            </div>
-                        </template>
-                        <template #special="{item}">
-                            <div class="flex justify-between items-center w-full">
-                                <div class="flex items-center gap-2">
-                                    <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4" />
-                                    <span class="truncate">{{ item.label }}</span>
-                                </div>
-                                <UIcon name="i-heroicons-sparkles-solid" class="h-5 w-5 text-yellow-400 dark:text-yellow-300" />
-                            </div>
-                        </template>
-                    </UDropdown>
-                </div>
-            </div>
-            <div class="p-4">
-                <slot />
-            </div>
+        <div class="text-xs text-center opacity-75">
+          <span v-if="!sidenavCollapsed">
+            &copy; 2023 NuxtApp.
+          </span>
         </div>
+      </div>
     </div>
+
+    <div class="flex flex-col w-full">
+      <div class="flex items-center justify-between py-2 px-4 rounded-sm bg-gray-50 dark:bg-gray-900">
+        <div class="flex items-center gap-2">
+          <UButton
+            icon="i-heroicons-bars-3"
+            color="gray"
+            padded variant="link"
+            :ui="{ rounded: 'rounded-full' }"
+            @click="sidenavCollapsed = !sidenavCollapsed"
+          />
+          <FallbackLogoText />
+        </div>
+        <div class="flex items-center gap-2">
+          <UInput v-model="search" icon="i-heroicons-magnifying-glass" placeholder="Search..." />
+          <UButton icon="i-heroicons-bell" color="gray" variant="link" :ui="{ rounded: 'rounded-full' }" />
+          <UTooltip
+            :text="`Switch to ${isDark ? 'Light' : 'Dark'} Mode`"
+            class="text-md"
+          >
+            <UButton
+              :icon="isDark ? 'i-heroicons-moon' : 'i-heroicons-sun'"
+              color="gray"
+              variant="link"
+              :ui="{ rounded: 'rounded-full' }"
+              @click="isDark = !isDark"
+            />
+          </UTooltip>
+          <UButton icon="i-heroicons-language" color="gray" variant="link" :ui="{ rounded: 'rounded-full' }" />
+          <UDropdown
+            :items="profileItems"
+            :ui="{ item: { disabled: 'cursor-text select-text opacity-1' } }"
+            :popper="{ placement: 'bottom-start' }"
+          >
+            <UButton color="gray" trailing-icon="i-heroicons-chevron-down" variant="ghost">
+              <template #leading>
+                <UAvatar src="https://avatars.githubusercontent.com/u/80736513?v=4" size="sm" />
+              </template>
+            </UButton>
+            <template #account="{ item }">
+              <div class="flex justify-between items-center text-sm text-left font-semibold">
+                <UAvatar :src="item.avatar" class="mr-2" />
+                <div class="flex flex-col">
+                  <p class="truncate font-medium text-gray-900 dark:text-white">
+                    {{ item.label }}
+                  </p>
+                  <span class="text-xs font-normal opacity-75">{{ item.sublabel }}</span>
+                </div>
+              </div>
+            </template>
+            <template #special="{ item }">
+              <div class="flex justify-between items-center w-full">
+                <div class="flex items-center gap-2">
+                  <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4" />
+                  <span class="truncate">{{ item.label }}</span>
+                </div>
+                <UIcon name="i-heroicons-sparkles-solid" class="h-5 w-5 text-yellow-400 dark:text-yellow-300" />
+              </div>
+            </template>
+          </UDropdown>
+        </div>
+      </div>
+      <div class="p-4">
+        <slot />
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
