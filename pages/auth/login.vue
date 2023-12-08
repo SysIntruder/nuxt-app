@@ -77,7 +77,7 @@ function onSubmit(evt) {
         <div class="flex justify-between my-4">
           <UCheckbox v-model="state.remember" name="remember" label="Remember me" />
           <ULink
-            to="/auth/register"
+            to="/auth/forgot-password"
             active-class="text-primary"
             inactive-class="text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-200"
             class="text-xs font-medium"
