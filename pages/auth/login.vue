@@ -11,15 +11,15 @@ definePageMeta({
 const toast = useToast()
 const showPassword = ref(false)
 const state = reactive({
-  username: undefined,
+  email: undefined,
   password: undefined,
   remember: false,
 })
 
 function validate(state) {
   const errors = []
-  if (!state.username)
-    errors.push({ path: 'username', message: 'Required' })
+  if (!state.email)
+    errors.push({ path: 'email', message: 'Required' })
   if (!state.password)
     errors.push({ path: 'password', message: 'Required' })
 
@@ -29,7 +29,7 @@ function validate(state) {
 function onSubmit(evt) {
   toast.add({
     title: 'You\'re Logged In!',
-    description: `Welcome, ${evt.data.username}`,
+    description: `Welcome, ${evt.data.email}`,
     timeout: 2000,
     callback: () => navigateTo({ path: '/dashboard' }),
   })
@@ -37,23 +37,23 @@ function onSubmit(evt) {
 </script>
 
 <template>
-  <UCard class="px-4">
-    <div class="mb-4">
-      <div class="mb-2 text-center">
-        <IconCSS name="i-simple-icons-nuxtdotjs" class="!h-20 !w-20 text-primary" />
-      </div>
-      <div class="mb-2 text-center text-2xl font-medium">
-        Login
-      </div>
-      <div class="mt-2 text-center text-sm opacity-75">
-        Please Login to Access All Features
-      </div>
-    </div>
+  <AuthCardContainer>
+    <template #logo>
+      <IconCSS name="i-simple-icons-nuxtdotjs" class="!h-20 !w-20 text-primary" />
+    </template>
 
-    <div class="mt-4">
+    <template #title>
+      Login
+    </template>
+
+    <template #subtitle>
+      Please Login to Access All Features
+    </template>
+
+    <template #default>
       <UForm :state="state" :validate="validate" @submit="onSubmit">
-        <UFormGroup label="Username" name="username" required class="mb-2">
-          <UInput v-model="state.username" icon="i-heroicons-user" placeholder="john.doe" />
+        <UFormGroup label="Email" name="email" required class="mb-2">
+          <UInput v-model="state.email" icon="i-heroicons-envelope" placeholder="john.doe@mail.com" />
         </UFormGroup>
         <UFormGroup label="Password" name="password" required class="my-2">
           <UInput
@@ -85,7 +85,7 @@ function onSubmit(evt) {
             Forgot Password
           </ULink>
         </div>
-        <UButton type="submit" label="Login" block size="lg" class="mt-4 mb-2" />
+        <UButton type="submit" label="Login" block size="lg" class="mt-8 mb-2" />
       </UForm>
       <div class="flex items-center mt-2 text-center text-sm">
         <span class="opacity-75">
@@ -103,16 +103,16 @@ function onSubmit(evt) {
       <UDivider class="my-4">
         OR
       </UDivider>
-      <UButton label="Login with Google" block size="lg" color="white" class="my-4">
+      <UButton label="Login with Google" block size="lg" color="white" class="mb-4">
         <template #leading>
           <IconCSS name="i-simple-icons-google" class="!h-4 !w-4" />
         </template>
       </UButton>
-      <UButton label="Login with Github" block size="lg" color="white" class="my-4">
+      <UButton label="Login with Github" block size="lg" color="white" class="mt-4">
         <template #leading>
           <IconCSS name="i-simple-icons-github" class="!h-4 !w-4" />
         </template>
       </UButton>
-    </div>
-  </UCard>
+    </template>
+  </AuthCardContainer>
 </template>

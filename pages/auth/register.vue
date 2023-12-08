@@ -11,27 +11,30 @@ definePageMeta({
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const state = reactive({
-  username: undefined,
+  email: undefined,
   password: undefined,
   confirmPassword: undefined,
 })
 </script>
 
 <template>
-  <UCard class="p-4">
-    <div class="mb-10">
-      <div class="mb-2 text-center text-2xl font-medium">
-        Register
-      </div>
-      <div class="mt-2 text-center opacity-75">
-        Please Complete Registration Forms Below
-      </div>
-    </div>
+  <AuthCardContainer>
+    <template #logo>
+      <IconCSS name="i-simple-icons-nuxtdotjs" class="!h-20 !w-20 text-primary" />
+    </template>
 
-    <div class="mt-10">
+    <template #title>
+      Register
+    </template>
+
+    <template #subtitle>
+      Please Complete Registration Forms Below
+    </template>
+
+    <template #default>
       <UForm :state="state">
-        <UFormGroup label="Username" name="username" required class="mb-2">
-          <UInput v-model="state.username" icon="i-heroicons-user" placeholder="john.doe" />
+        <UFormGroup label="Email" name="email" required class="mb-2">
+          <UInput v-model="state.email" icon="i-heroicons-envelope" placeholder="john.doe@mail.com" />
         </UFormGroup>
         <UFormGroup label="Password" name="password" required class="my-2">
           <UInput
@@ -71,9 +74,9 @@ const state = reactive({
             </template>
           </UInput>
         </UFormGroup>
-        <UButton type="submit" label="Register" block size="lg" class="mt-10 mb-2" />
+        <UButton type="submit" label="Register" block size="lg" class="mt-8 mb-2" />
       </UForm>
-      <div class="mt-2 text-center text-sm">
+      <div class="flex items-center mt-2 text-center text-sm">
         <span class="opacity-75">
           Already have an account?
         </span>
@@ -83,9 +86,9 @@ const state = reactive({
           inactive-class="text-primary-500 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-200"
           class="font-medium"
         >
-          Login
+          &nbsp;Login
         </ULink>
       </div>
-    </div>
-  </UCard>
+    </template>
+  </AuthCardContainer>
 </template>
