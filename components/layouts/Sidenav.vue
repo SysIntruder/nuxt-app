@@ -5,7 +5,11 @@ const props = defineProps(['links', 'collapsed'])
 <template>
     <div v-for="(link, linkId) in links" :key="`nav-${linkId}`">
         <UDivider class="my-2" />
-        <UVerticalNavigation v-if="!collapsed" :links="link" />
+        <UVerticalNavigation v-if="!collapsed" :links="link">
+            <template #icon="{link: l}">
+                <IconCSS :name="l.icon" class="!h-4 !w-4" />
+            </template>
+        </UVerticalNavigation>
         <div v-else class="flex flex-col">
             <UTooltip
                 v-for="(l, lId) in link"

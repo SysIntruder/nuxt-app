@@ -12,34 +12,21 @@ const isDark = computed({
     },
 })
 
-const navLinks = [
-    [
-        { label: 'Dashboard', icon: 'i-heroicons-squares-2x2', to: '/dashboard' },
-        { label: 'Statistics', icon: 'i-heroicons-chart-bar', to: '' },
-        { label: 'Reports', icon: 'i-heroicons-clipboard-document-list', to: '' },
-        { label: 'Maps', icon: 'i-heroicons-map', to: '' },
-        { label: 'Events', icon: 'i-heroicons-calendar', to: '' },
-    ], [
-        { label: 'Products', icon: 'i-heroicons-cube', to: '' },
-        { label: 'Stores', icon: 'i-heroicons-building-storefront', to: '' },
-        { label: 'Discounts', icon: 'i-heroicons-banknotes', to: '' },
-    ], [
-        { label: 'Activity Log', icon: 'i-heroicons-clock', to: '' },
-        { label: 'Settings', icon: 'i-heroicons-cog-6-tooth', to: '' },
-        { label: 'Help', icon: 'i-heroicons-lifebuoy', to: '' },
-    ]
-]
+const { data: { value: navLinks } } = await useFetch('/api/menu')
 const profileItems = [
+    [{
+        label: 'Logged In User',
+        sublabel: 'user\'s role',
+        avatar: 'https://avatars.githubusercontent.com/u/80736513?v=4',
+        slot: 'account',
+        disabled: true
+    }],
     [
-        { label: 'Logged In User', sublabel: 'user\'s role', avatar: 'https://avatars.githubusercontent.com/u/80736513?v=4', slot: 'account', disabled: true }
-    ],[
         { label: 'Your Profile', icon: 'i-heroicons-user-circle', to: '' },
         { label: 'Add Account', icon: 'i-heroicons-user-plus', to: '' },
-    ], [
-        { label: 'Try Enterprise', icon: 'i-heroicons-globe-alt', to: '', slot: 'special' },
-    ], [
-        { label: 'Logout', to: '/auth/login' },
-    ]
+    ],
+    [{ label: 'Try Enterprise', icon: 'i-heroicons-globe-alt', to: '', slot: 'special' }],
+    [{ label: 'Logout', to: '/auth/login' }]
 ]
 </script>
 
