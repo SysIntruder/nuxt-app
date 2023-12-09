@@ -7,7 +7,7 @@ const { title, status, diff, percentage, total, currency } = props
   <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
     <template #header>
       <div class="flex justify-between items-center">
-        <span class="text-lg truncate">{{ title }}</span>
+        <span class="text-lg truncate opacity-75">{{ title }}</span>
         <span
           v-if="percentage > -1"
           class="text-right font-medium"
