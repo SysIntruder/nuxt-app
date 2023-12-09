@@ -118,7 +118,7 @@ const profileItems = [
           </UDropdown>
         </div>
       </div>
-      <div class="p-4">
+      <div class="py-4 px-2">
         <slot />
       </div>
     </div>
