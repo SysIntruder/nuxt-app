@@ -10,15 +10,15 @@ const { title, status, diff, percentage, total, currency } = props
         <span class="text-lg truncate">{{ title }}</span>
         <span
           v-if="percentage > -1"
-          class="flex items-center text-right font-medium"
+          class="text-right font-medium"
           :class="{
             'text-green-500 dark:text-green-400': status === 'good',
             'text-red-500 dark:text-red-400': status === 'bad',
           }"
         >
-          <span v-if="diff === 'inc'" class="text-4xl relative bottom-0.5">&#128897;</span>
-          <span v-else-if="diff === 'dec'" class="text-4xl relative bottom-0.5">&#128899;</span>
-          <span v-else class="text-4xl">&#128900;</span>
+          <span v-if="diff === 'inc'" class="text-xl">&#9650;</span>
+          <span v-else-if="diff === 'dec'" class="text-xl">&#9660;</span>
+          <span v-else class="text-xl">&#9679;</span>
           {{ percentage }}%
         </span>
       </div>
