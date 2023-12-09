@@ -47,7 +47,7 @@ function requestVerificationCode() {
   toast.add({
     title: 'Verification Code is Sent!',
     description: `Your Verification Code is, ${VERIFICATION_CODE}`,
-    timeout: 10000,
+    timeout: 3000,
   })
 
   step.value++
@@ -62,7 +62,7 @@ function changePassword() {
   step.value++
   setTimeout(() => {
     navigateTo({ path: '/auth/login' })
-  }, 1000)
+  }, 2000)
 }
 </script>
 
