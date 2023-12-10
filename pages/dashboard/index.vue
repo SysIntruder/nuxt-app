@@ -1,29 +1,53 @@
 <script setup>
+import colors from 'tailwindcss/colors'
+
 useHead({
   title: 'Dashboard',
 })
 
+const colorMode = useColorMode()
 const { data: { value: cards } } = await useFetch('/api/dashboard-card')
-const { data: { value: topStores } } = await useFetch('/api/dashboard-top-stores')
-const headerTopStores = [{
-  key: 'pos',
-  label: '#',
-}, {
-  key: 'name',
-  label: 'Store name',
-}, {
-  key: 'revenue',
-  label: 'Revenue',
-  sortable: true,
-  direction: 'desc',
-}]
+const { data: { value: { categories: topProductsCategories, series: topProductsSeries } } } = await useFetch('/api/dashboard-top-product-chart')
+const topProductChartOpt = {
+  dataLabels: {
+    enabled: true,
+    offsetX: 35,
+    formatter(val) {
+      return val ? `${formatDotNumber(val)}` : ''
+    },
+    style: {
+      colors: [colorMode.value === 'dark' ? colors.white : colors.slate[950]],
+    },
+  },
+  xaxis: {
+    categories: topProductsCategories,
+    title: {
+      text: 'Sold',
+    },
+    labels: {
+      formatter(val) {
+        return val ? `${formatDotNumber(val)}` : ''
+      },
+    },
+  },
+  yaxis: {
+    title: {
+      text: 'Products',
+    },
+    labels: {
+      formatter(val) {
+        return val ? `${formatDotNumber(val)}` : ''
+      },
+    },
+  },
+}
 
 const { data: { value: revenueCharts } } = await useFetch('/api/dashboard-revenue-chart')
 const revenueChartOpt = {
   dataLabels: {
     enabled: true,
     formatter(val) {
-      return val ? `Rp ${formatDotNumber(val)}` : 'Rp 0'
+      return val ? `Rp ${formatDotNumber(val)}` : ''
     },
   },
   xaxis: {
@@ -38,7 +62,7 @@ const revenueChartOpt = {
     },
     labels: {
       formatter(val) {
-        return val ? `Rp ${formatDotNumber(val)}` : 'Rp 0'
+        return val ? `Rp ${formatDotNumber(val)}` : ''
       },
     },
   },
@@ -64,21 +88,17 @@ function formatDotNumber(num) {
   </div>
 
   <div class="grid grid-cols-4">
-    <UCard class="col-span-3 m-2">
+    <UCard class="col-span-3 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Previous vs Current Year Revenue</span>
+        <span class="text-lg truncate opacity-75">Previous & Current Year Revenue</span>
       </template>
-      <LazyStatisticsLineChart :options="revenueChartOpt" :series="revenueCharts" :height="350" />
+      <LazyStatisticsLineChart :options="revenueChartOpt" :series="revenueCharts" :height="500" />
     </UCard>
     <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Top Stores</span>
+        <span class="text-lg truncate opacity-75">Previous & Current Year Top Products</span>
       </template>
-      <UTable :rows="topStores" :columns="headerTopStores">
-        <template #revenue-data="{ row }">
-          <span>{{ `Rp ${formatDotNumber(row.revenue)}` }}</span>
-        </template>
-      </UTable>
+      <LazyStatisticsBarChart :options="topProductChartOpt" :series="topProductsSeries" :height="500" />
     </UCard>
   </div>
 </template>

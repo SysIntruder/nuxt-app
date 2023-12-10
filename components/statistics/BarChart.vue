@@ -12,7 +12,7 @@ const defaultOpt = ref({
     background: colorMode.value === 'dark' ? colors.slate[900] : colors.slate[50],
     foreColor: colorMode.value === 'dark' ? colors.white : colors.slate[950],
     height: 350,
-    type: 'line',
+    type: 'bar',
     toolbar: {
       show: true,
       offsetY: -10,
@@ -27,31 +27,34 @@ const defaultOpt = ref({
       },
     },
   },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      barHeight: '50%',
+      dataLabels: {
+        position: 'top',
+      },
+    },
+  },
   colors: colorMode.value === 'dark'
     ? [colors.green[400], colors.red[400], colors.blue[400]]
     : [colors.green[500], colors.red[500], colors.blue[500]],
   dataLabels: {
     enabled: true,
-    background: {
-      foreColor: colorMode.value === 'dark' ? colors.slate[950] : colors.white,
+    offsetX: 35,
+    style: {
+      colors: [colorMode.value === 'dark' ? colors.white : colors.slate[950]],
     },
   },
   stroke: {
-    curve: 'straight',
+    show: false,
   },
-  markers: {
-    size: 1,
+  tooltip: {
+    shared: true,
+    intersect: false,
   },
   xaxis: {
-    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    title: {
-      text: 'Month',
-    },
-  },
-  yaxis: {
-    title: {
-      text: 'Temperature',
-    },
+    categories: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10'],
   },
   legend: {
     position: 'bottom',
@@ -73,8 +76,8 @@ watch(colorMode, (newColorMode) => {
       ? [colors.green[400], colors.red[400], colors.blue[400]]
       : [colors.green[500], colors.red[500], colors.blue[500]],
     dataLabels: {
-      background: {
-        foreColor: colorMode.value === 'dark' ? colors.slate[950] : colors.white,
+      style: {
+        colors: [newColorMode.value === 'dark' ? colors.white : colors.slate[950]],
       },
     },
   })
