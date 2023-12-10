@@ -10,7 +10,6 @@ export default defineEventHandler((_) => {
     [
       { label: 'Products', icon: 'i-heroicons-cube', to: '' },
       { label: 'Stores', icon: 'i-heroicons-building-storefront', to: '' },
-      { label: 'Discounts', icon: 'i-heroicons-receipt-percent', to: '' },
     ],
     [
       { label: 'Activity Log', icon: 'i-heroicons-clock', to: '' },

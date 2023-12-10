@@ -68,6 +68,8 @@ const revenueChartOpt = {
   },
 }
 
+const { data: { value: recentActivities } } = await useFetch('/api/dashboard-recent-activities')
+
 function formatDotNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 }
@@ -107,6 +109,24 @@ function formatDotNumber(num) {
       <template #header>
         <span class="text-lg truncate opacity-75">Recent Activities</span>
       </template>
+
+      <UVerticalNavigation
+        :links="recentActivities"
+        class="w-full"
+        :ui="{ label: 'truncate relative text-gray-900 dark:text-white flex-initial w-32 text-left' }"
+      >
+        <template #icon="{ link: l }">
+          <IconCSS :name="l.icon" class="!h-4 !w-4" />
+        </template>
+        <template #badge="{ link: l }">
+          <div class="flex-1 flex justify-between relative truncate">
+            <div class="truncate">
+              <span class="text-primary font-medium">{{ l.user }}</span>&nbsp;{{ l.badge }}
+            </div>
+            <div>{{ l.time }}</div>
+          </div>
+        </template>
+      </UVerticalNavigation>
     </UCard>
     <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
