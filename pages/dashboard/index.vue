@@ -23,7 +23,7 @@ const revenueChartOpt = {
   dataLabels: {
     enabled: true,
     formatter(val) {
-      return `Rp ${formatDotNumber(val)}`
+      return val ? `Rp ${formatDotNumber(val)}` : 'Rp 0'
     },
   },
   xaxis: {
@@ -38,7 +38,7 @@ const revenueChartOpt = {
     },
     labels: {
       formatter(val) {
-        return `Rp ${formatDotNumber(val)}`
+        return val ? `Rp ${formatDotNumber(val)}` : 'Rp 0'
       },
     },
   },

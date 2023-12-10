@@ -9,12 +9,22 @@ const defaultOpt = ref({
     mode: colorMode.value,
   },
   chart: {
-    background: 'rgba(0,0,0,0)',
+    background: colorMode.value === 'dark' ? colors.slate[900] : colors.slate[50],
     foreColor: colorMode.value === 'dark' ? colors.white : colors.slate[950],
     height: 350,
     type: 'line',
     toolbar: {
-      show: false,
+      show: true,
+      offsetY: -10,
+      tools: {
+        download: true,
+        selection: false,
+        zoom: false,
+        zoomin: false,
+        zoomout: false,
+        pan: false,
+        reset: false,
+      },
     },
   },
   colors: [colors.red[500], colors.green[500], colors.blue[500]],
@@ -22,7 +32,7 @@ const defaultOpt = ref({
     enabled: true,
   },
   stroke: {
-    curve: 'smooth',
+    curve: 'straight',
   },
   markers: {
     size: 1,
@@ -51,6 +61,7 @@ watch(colorMode, (newColorMode) => {
       mode: newColorMode.value,
     },
     chart: {
+      background: colorMode.value === 'dark' ? colors.slate[900] : colors.slate[50],
       foreColor: newColorMode.value === 'dark' ? colors.white : colors.slate[950],
     },
   })
