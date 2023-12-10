@@ -6,10 +6,10 @@
   scrollbar-width: auto;
 }
 .light * {
-  scrollbar-color: #22c55e #f8fafc;
+  scrollbar-color: #94a3b8 #f8fafc;
 }
 .dark * {
-  scrollbar-color: #4ade80 #0f172a;
+  scrollbar-color: #94a3b8 #0f172a;
 }
 
 *::-webkit-scrollbar {
@@ -17,19 +17,21 @@
 }
 .light *::-webkit-scrollbar-track {
   background: #f8fafc;
+  border: 1px solid #e2e8f0;
 }
 .dark *::-webkit-scrollbar-track {
   background: #0f172a;
+  border: 1px solid #1e293b;
 }
 
 *::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .light *::-webkit-scrollbar-thumb {
-  background-color: #22c55e;
-  border: 3px solid #f8fafc;
+  background-color: #94a3b8;
+  border: 3px solid #e2e8f0;
 }
 .dark *::-webkit-scrollbar-thumb {
-  background-color: #4ade80;
-  border: 3px solid #0f172a;
+  background-color: #94a3b8;
+  border: 3px solid #1e293b;
 }
