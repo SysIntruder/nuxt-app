@@ -57,7 +57,7 @@ const profileItems = [
       </div>
     </div>
 
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-full h-full">
       <div class="flex items-center justify-between py-2 px-4 rounded-sm bg-gray-50 dark:bg-gray-900">
         <div class="flex items-center gap-2">
           <UButton
@@ -118,7 +118,7 @@ const profileItems = [
           </UDropdown>
         </div>
       </div>
-      <div class="py-4 px-2">
+      <div class="py-4 px-2 overflow-auto">
         <slot />
       </div>
     </div>

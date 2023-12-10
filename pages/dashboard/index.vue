@@ -101,4 +101,17 @@ function formatDotNumber(num) {
       <LazyStatisticsBarChart :options="topProductChartOpt" :series="topProductsSeries" :height="500" />
     </UCard>
   </div>
+
+  <div class="grid grid-cols-2">
+    <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+      <template #header>
+        <span class="text-lg truncate opacity-75">Recent Activities</span>
+      </template>
+    </UCard>
+    <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+      <template #header>
+        <span class="text-lg truncate opacity-75">Upcoming Events</span>
+      </template>
+    </UCard>
+  </div>
 </template>
