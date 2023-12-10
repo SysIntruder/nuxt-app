@@ -18,6 +18,32 @@ const headerTopStores = [{
   direction: 'desc',
 }]
 
+const { data: { value: revenueCharts } } = await useFetch('/api/dashboard-revenue-chart')
+const revenueChartOpt = {
+  dataLabels: {
+    enabled: true,
+    formatter(val) {
+      return `Rp ${formatDotNumber(val)}`
+    },
+  },
+  xaxis: {
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    title: {
+      text: 'Month',
+    },
+  },
+  yaxis: {
+    title: {
+      text: 'Revenue',
+    },
+    labels: {
+      formatter(val) {
+        return `Rp ${formatDotNumber(val)}`
+      },
+    },
+  },
+}
+
 function formatDotNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 }
@@ -38,7 +64,12 @@ function formatDotNumber(num) {
   </div>
 
   <div class="grid grid-cols-4">
-    <UCard class="col-span-3 m-2" />
+    <UCard class="col-span-3 m-2">
+      <template #header>
+        <span class="text-lg truncate opacity-75">Previous vs Current Year Revenue</span>
+      </template>
+      <LazyStatisticsLineChart :options="revenueChartOpt" :series="revenueCharts" :height="350" />
+    </UCard>
     <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <span class="text-lg truncate opacity-75">Top Stores</span>
