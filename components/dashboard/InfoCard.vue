@@ -26,7 +26,7 @@ const { title, status, diff, percentage, total, currency } = props
 
     <div class="flex flex-col gap-2 w-full">
       <span class="text-4xl font-semibold truncate">
-        {{ currency ? 'Rp ' : '' }}{{ total ? total : 0 }}
+        {{ currency ? `$${total ? total : 0} Million` : `${total ? total : 0}` }}
       </span>
     </div>
   </UCard>

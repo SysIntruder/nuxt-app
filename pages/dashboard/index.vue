@@ -11,9 +11,9 @@ const { data: { value: { categories: productsCategories, series: productsSeries 
 const productsChartOpt = {
   dataLabels: {
     enabled: true,
-    offsetX: 25,
+    offsetX: 45,
     formatter(val) {
-      return val ? `${formatDotNumber(val)}` : ''
+      return val ? `$${formatDotNumber(val)} M` : ''
     },
     style: {
       colors: [colorMode.value === 'dark' ? colors.white : colors.slate[950]],
@@ -26,7 +26,7 @@ const productsChartOpt = {
     },
     labels: {
       formatter(val) {
-        return val ? `${formatDotNumber(val)}` : ''
+        return val ? `$${formatDotNumber(val)} M` : ''
       },
     },
   },
@@ -36,7 +36,9 @@ const productsChartOpt = {
     },
     labels: {
       formatter(val) {
-        return val ? `${formatDotNumber(val)}` : ''
+        return val
+          ? Number.isFinite(val) ? `$${formatDotNumber(val)} M` : val
+          : ''
       },
     },
   },
@@ -47,7 +49,7 @@ const profitChartOpt = {
   dataLabels: {
     enabled: true,
     formatter(val) {
-      return val ? `Rp ${formatDotNumber(val)}` : ''
+      return val ? `$${formatDotNumber(val)} M` : ''
     },
   },
   xaxis: {
@@ -62,7 +64,7 @@ const profitChartOpt = {
     },
     labels: {
       formatter(val) {
-        return val ? `Rp ${formatDotNumber(val)}` : ''
+        return val ? `$${formatDotNumber(val)} M` : ''
       },
     },
   },
