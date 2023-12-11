@@ -30,7 +30,6 @@ const defaultOpt = ref({
   plotOptions: {
     bar: {
       horizontal: true,
-      barHeight: '50%',
       dataLabels: {
         position: 'top',
       },
@@ -41,7 +40,7 @@ const defaultOpt = ref({
     : [colors.green[500], colors.red[500], colors.blue[500]],
   dataLabels: {
     enabled: true,
-    offsetX: 35,
+    offsetX: 20,
     style: {
       colors: [colorMode.value === 'dark' ? colors.white : colors.slate[950]],
     },

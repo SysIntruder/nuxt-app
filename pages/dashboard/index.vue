@@ -7,11 +7,11 @@ useHead({
 
 const colorMode = useColorMode()
 const { data: { value: cards } } = await useFetch('/api/dashboard-card')
-const { data: { value: { categories: topProductsCategories, series: topProductsSeries } } } = await useFetch('/api/dashboard-top-product-chart')
-const topProductChartOpt = {
+const { data: { value: { categories: productsCategories, series: productsSeries } } } = await useFetch('/api/dashboard-products-chart')
+const productsChartOpt = {
   dataLabels: {
     enabled: true,
-    offsetX: 35,
+    offsetX: 25,
     formatter(val) {
       return val ? `${formatDotNumber(val)}` : ''
     },
@@ -20,7 +20,7 @@ const topProductChartOpt = {
     },
   },
   xaxis: {
-    categories: topProductsCategories,
+    categories: productsCategories,
     title: {
       text: 'Sold',
     },
@@ -42,8 +42,8 @@ const topProductChartOpt = {
   },
 }
 
-const { data: { value: revenueCharts } } = await useFetch('/api/dashboard-revenue-chart')
-const revenueChartOpt = {
+const { data: { value: profitCharts } } = await useFetch('/api/dashboard-profit-chart')
+const profitChartOpt = {
   dataLabels: {
     enabled: true,
     formatter(val) {
@@ -58,7 +58,7 @@ const revenueChartOpt = {
   },
   yaxis: {
     title: {
-      text: 'Revenue',
+      text: undefined,
     },
     labels: {
       formatter(val) {
@@ -76,7 +76,7 @@ function formatDotNumber(num) {
 </script>
 
 <template>
-  <div class="grid grid-cols-4">
+  <div class="grid grid-cols-5">
     <template v-for="(card, cardId) in cards" :key="cardId">
       <DashboardInfoCard
         :title="card.title"
@@ -89,23 +89,33 @@ function formatDotNumber(num) {
     </template>
   </div>
 
-  <div class="grid grid-cols-4">
+  <div class="grid grid-cols-5">
     <UCard class="col-span-3 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Previous & Current Year Revenue</span>
+        <span class="text-lg truncate opacity-75">Revenues, Expenses, & Profits</span>
       </template>
-      <LazyStatisticsLineChart :options="revenueChartOpt" :series="revenueCharts" :height="500" />
+      <LazyStatisticsLineChart :options="profitChartOpt" :series="profitCharts" :height="500" />
     </UCard>
-    <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Previous & Current Year Top Products</span>
+        <span class="text-lg truncate opacity-75">Monthly Products Sales</span>
       </template>
-      <LazyStatisticsBarChart :options="topProductChartOpt" :series="topProductsSeries" :height="500" />
+      <LazyStatisticsBarChart :options="productsChartOpt" :series="productsSeries" :height="500" />
     </UCard>
   </div>
 
-  <div class="grid grid-cols-2">
-    <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+  <div class="grid grid-cols-6">
+    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+      <template #header>
+        <span class="text-lg truncate opacity-75">Top Partners</span>
+      </template>
+    </UCard>
+    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+      <template #header>
+        <span class="text-lg truncate opacity-75">Warehouse Status</span>
+      </template>
+    </UCard>
+    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <span class="text-lg truncate opacity-75">Recent Activities</span>
       </template>
@@ -113,7 +123,7 @@ function formatDotNumber(num) {
       <UVerticalNavigation
         :links="recentActivities"
         class="w-full"
-        :ui="{ label: 'truncate relative text-gray-900 dark:text-white flex-initial w-32 text-left' }"
+        :ui="{ label: 'truncate relative text-gray-900 dark:text-white flex-initial w-16 text-left' }"
       >
         <template #icon="{ link: l }">
           <IconCSS :name="l.icon" class="!h-4 !w-4" />
@@ -127,11 +137,6 @@ function formatDotNumber(num) {
           </div>
         </template>
       </UVerticalNavigation>
-    </UCard>
-    <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
-      <template #header>
-        <span class="text-lg truncate opacity-75">Upcoming Events</span>
-      </template>
     </UCard>
   </div>
 </template>
