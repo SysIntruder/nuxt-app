@@ -10,7 +10,7 @@ const { title, status, diff, percentage, total, currency } = props
         <span class="text-lg truncate opacity-75">{{ title }}</span>
         <span
           v-if="percentage > -1"
-          class="text-right font-medium"
+          class="text-right font-medium truncate"
           :class="{
             'text-green-500 dark:text-green-400': status === 'good',
             'text-red-500 dark:text-red-400': status === 'bad',

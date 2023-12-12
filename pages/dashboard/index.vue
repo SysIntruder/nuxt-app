@@ -6,8 +6,45 @@ useHead({
 })
 
 const colorMode = useColorMode()
-const { data: { value: cards } } = await useFetch('/api/dashboard-card')
-const { data: { value: { categories: productsCategories, series: productsSeries } } } = await useFetch('/api/dashboard-products-chart')
+
+const cards = ref([])
+async function loadCards() {
+  const { data: { value } } = await useFetch('/api/dashboard-card')
+  cards.value = value
+}
+
+const profitCharts = ref([])
+const profitChartOpt = {
+  dataLabels: {
+    enabled: true,
+    formatter(val) {
+      return val ? `$${formatDotNumber(val)} M` : ''
+    },
+  },
+  xaxis: {
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    title: {
+      text: 'Month',
+    },
+  },
+  yaxis: {
+    title: {
+      text: undefined,
+    },
+    labels: {
+      formatter(val) {
+        return val ? `$${formatDotNumber(val)} M` : ''
+      },
+    },
+  },
+}
+async function loadProfitCharts() {
+  const { data: { value } } = await useFetch('/api/dashboard-profit-chart')
+  profitCharts.value = value
+}
+
+const productsCategories = ref([])
+const productsSeries = ref([])
 const productsChartOpt = {
   dataLabels: {
     enabled: true,
@@ -43,38 +80,71 @@ const productsChartOpt = {
     },
   },
 }
+async function loadProductsChart() {
+  const { data: { value: { categories, series } } } = await useFetch('/api/dashboard-products-chart')
+  productsCategories.value = categories
+  productsSeries.value = series
+}
 
-const { data: { value: profitCharts } } = await useFetch('/api/dashboard-profit-chart')
-const profitChartOpt = {
+const incomeStatementCharts = ref([])
+const incomeStatementChartOpt = {
   dataLabels: {
     enabled: true,
-    formatter(val) {
+    formatter(_, { config: { series }, dataPointIndex }) {
+      const curData = series[0].data[dataPointIndex].y
+      const val = Number.parseFloat(curData[1] - curData[0]).toFixed(1)
+
       return val ? `$${formatDotNumber(val)} M` : ''
     },
+    style: {
+      colors: [colorMode.value === 'dark' ? colors.white : colors.slate[950]],
+    },
   },
+  colors: [
+    function ({ dataPointIndex }) {
+      if ([0, 1, 3, 9, 11].includes(dataPointIndex))
+        return colorMode.value === 'dark' ? colors.green[400] : colors.green[500]
+      else
+        return colorMode.value === 'dark' ? colors.red[400] : colors.red[500]
+    },
+  ],
   xaxis: {
-    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    title: {
-      text: 'Month',
+    style: {
+      fontWeight: 700,
     },
-  },
-  yaxis: {
-    title: {
-      text: undefined,
-    },
-    labels: {
-      formatter(val) {
-        return val ? `$${formatDotNumber(val)} M` : ''
+    group: {
+      style: {
+        fontSize: '10px',
+        fontWeight: 700,
       },
+      groups: [
+        { title: 'Revenue', cols: 4 },
+        { title: 'Expenses', cols: 5 },
+        { title: 'Profit', cols: 3 },
+      ],
     },
   },
 }
+async function loadIncomeStatementCharts() {
+  const { data: { value } } = await useFetch('/api/dashboard-income-statement-chart')
+  incomeStatementCharts.value = value
+}
 
-const { data: { value: recentActivities } } = await useFetch('/api/dashboard-recent-activities')
+const recentActivities = ref([])
+async function loadRecentActivities() {
+  const { data: { value } } = await useFetch('/api/dashboard-recent-activities')
+  recentActivities.value = value
+}
 
 function formatDotNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 }
+
+await loadCards()
+await loadProfitCharts()
+await loadProductsChart()
+await loadIncomeStatementCharts()
+await loadRecentActivities()
 </script>
 
 <template>
@@ -94,32 +164,48 @@ function formatDotNumber(num) {
   <div class="grid grid-cols-5">
     <UCard class="col-span-3 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Revenues, Expenses, & Profits</span>
+        <div class="flex justify-between">
+          <span class="text-lg truncate opacity-75">Revenues, Expenses, & Profits</span>
+          <UTooltip text="Refresh" :popper="{ placement: 'left' }">
+            <UButton color="gray" icon="i-heroicons-arrow-path" @click="loadProfitCharts" />
+          </UTooltip>
+        </div>
       </template>
-      <LazyStatisticsLineChart :options="profitChartOpt" :series="profitCharts" :height="500" />
+      <LazyStatisticsLineChart :options="profitChartOpt" :series="toRaw(profitCharts)" :height="500" />
     </UCard>
     <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Monthly Products Sales</span>
+        <div class="flex justify-between">
+          <span class="text-lg truncate opacity-75">Monthly Products Sales</span>
+          <UTooltip text="Refresh" :popper="{ placement: 'left' }">
+            <UButton color="gray" icon="i-heroicons-arrow-path" @click="loadProductsChart" />
+          </UTooltip>
+        </div>
       </template>
-      <LazyStatisticsBarChart :options="productsChartOpt" :series="productsSeries" :height="500" />
+      <LazyStatisticsBarChart :options="productsChartOpt" :series="toRaw(productsSeries)" :height="500" />
     </UCard>
   </div>
 
-  <div class="grid grid-cols-6">
-    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+  <div class="grid grid-cols-5">
+    <UCard class="col-span-3 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Top Partners</span>
+        <div class="flex justify-between">
+          <span class="text-lg truncate opacity-75">Income Statement</span>
+          <UTooltip text="Refresh" :popper="{ placement: 'left' }">
+            <UButton color="gray" icon="i-heroicons-arrow-path" @click="loadIncomeStatementCharts" />
+          </UTooltip>
+        </div>
       </template>
+      <LazyStatisticsRangeBarChart :options="incomeStatementChartOpt" :series="toRaw(incomeStatementCharts)" :height="400" />
     </UCard>
     <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
-        <span class="text-lg truncate opacity-75">Warehouse Status</span>
-      </template>
-    </UCard>
-    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
-      <template #header>
-        <span class="text-lg truncate opacity-75">Recent Activities</span>
+        <div class="flex justify-between">
+          <span class="text-lg truncate opacity-75">Recent Activities</span>
+          <UTooltip text="Refresh" :popper="{ placement: 'left' }">
+            <UButton color="gray" icon="i-heroicons-arrow-path" @click="loadRecentActivities" />
+          </UTooltip>
+        </div>
       </template>
 
       <UVerticalNavigation
