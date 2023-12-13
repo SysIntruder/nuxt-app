@@ -7,6 +7,77 @@ useHead({
 
 const colorMode = useColorMode()
 
+const dateRangeFilter = ref({
+  start: new Date(),
+  end: new Date(),
+})
+const dateRangeFilterLabel = computed(() => {
+  const start = dateRangeFilter.value.start.toLocaleDateString(
+    'en-us',
+    {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    },
+  )
+  const end = dateRangeFilter.value.end.toLocaleDateString(
+    'en-us',
+    {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    },
+  )
+
+  return `${start} - ${end}`
+})
+
+const productFilter = ref([])
+const productOptions = [
+  'Great Club',
+  'Longsword',
+  'Claymore',
+  'Uchigatana',
+  'Bandit Knife',
+  'Mace',
+  'Winged Spear',
+  'Black Knight Sword',
+  'Silver Knight Sword',
+  'Black Knight Shield',
+  'Silver Knight Shield',
+]
+
+const typeFilter = ref([])
+const typeOptions = [
+  'Ultra Great Hammer',
+  'Straight Sword',
+  'Great Sword',
+  'Katana',
+  'Daggers',
+  'Hammer',
+  'Spear',
+  'Shield',
+]
+
+const vendorFilter = ref([])
+const vendorOptions = [
+  'Blacksmith Andre',
+  'Giant Blacksmith',
+  'Blacksmith Vamos',
+  'Blacksmith Rickert of Vinheim',
+  'Others',
+]
+
+const customerFilter = ref([])
+const customerOptions = [
+  'Solaire of Astora',
+  'Knight Lautrec of Carim',
+  'Siegmeyer of Catarina',
+  'Others',
+]
+
 const cards = ref([])
 async function loadCards() {
   const { data: { value } } = await useFetch('/api/dashboard-card')
@@ -148,6 +219,70 @@ await loadRecentActivities()
 </script>
 
 <template>
+  <div class="grid m-2">
+    <UCard>
+      <div class="flex items-center">
+        <UPopover :popper="{ placement: 'bottom-start' }">
+          <UFormGroup label="Time period" class="mr-2">
+            <UInput readonly :value="dateRangeFilterLabel" icon="i-heroicons-calendar" class="w-[18vw]" />
+          </UFormGroup>
+
+          <template #panel="{ close }">
+            <LazyFormDatePicker v-model.range="dateRangeFilter" @close="close" />
+          </template>
+        </UPopover>
+
+        <UFormGroup label="Products Filter" class="mx-2">
+          <USelectMenu
+            v-model="productFilter"
+            :options="productOptions"
+            multiple
+            placeholder="Filter by Products"
+            class="w-[15vw]"
+            :popper="{ strategy: 'fixed' }"
+            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
+          />
+        </UFormGroup>
+
+        <UFormGroup label="Type Filter" class="mx-2">
+          <USelectMenu
+            v-model="typeFilter"
+            :options="typeOptions"
+            multiple
+            placeholder="Filter by Types"
+            class="w-[15vw]"
+            :popper="{ strategy: 'fixed' }"
+            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
+          />
+        </UFormGroup>
+
+        <UFormGroup label="Vendor Filter" class="mx-2">
+          <USelectMenu
+            v-model="vendorFilter"
+            :options="vendorOptions"
+            multiple
+            placeholder="Filter by Vendors"
+            class="w-[15vw]"
+            :popper="{ strategy: 'fixed' }"
+            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
+          />
+        </UFormGroup>
+
+        <UFormGroup label="Customer Filter" class="mx-2">
+          <USelectMenu
+            v-model="customerFilter"
+            :options="customerOptions"
+            multiple
+            placeholder="Filter by Customers"
+            class="w-[15vw]"
+            :popper="{ strategy: 'fixed' }"
+            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
+          />
+        </UFormGroup>
+      </div>
+    </UCard>
+  </div>
+
   <div class="grid grid-cols-5">
     <template v-for="(card, cardId) in cards" :key="cardId">
       <DashboardInfoCard
@@ -171,8 +306,10 @@ await loadRecentActivities()
           </UTooltip>
         </div>
       </template>
-      <LazyStatisticsLineChart :options="profitChartOpt" :series="toRaw(profitCharts)" :height="500" />
+
+      <LazyStatisticsLineChart :options="profitChartOpt" :series="toRaw(profitCharts)" :height="400" />
     </UCard>
+
     <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
@@ -182,7 +319,8 @@ await loadRecentActivities()
           </UTooltip>
         </div>
       </template>
-      <LazyStatisticsBarChart :options="productsChartOpt" :series="toRaw(productsSeries)" :height="500" />
+
+      <LazyStatisticsBarChart :options="productsChartOpt" :series="toRaw(productsSeries)" :height="400" />
     </UCard>
   </div>
 
@@ -196,8 +334,10 @@ await loadRecentActivities()
           </UTooltip>
         </div>
       </template>
+
       <LazyStatisticsRangeBarChart :options="incomeStatementChartOpt" :series="toRaw(incomeStatementCharts)" :height="400" />
     </UCard>
+
     <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">

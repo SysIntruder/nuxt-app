@@ -30,7 +30,7 @@ function onSubmit(evt) {
   toast.add({
     title: 'You\'re Logged In!',
     description: `Welcome, ${evt.data.email}`,
-    timeout: 2000,
+    timeout: 1000,
     callback: () => navigateTo({ path: '/dashboard' }),
   })
 }
