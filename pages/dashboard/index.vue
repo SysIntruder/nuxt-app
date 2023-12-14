@@ -337,7 +337,7 @@ await loadRecentActivities()
 
   <div class="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-4 my-4">
     <template v-for="(card, cardId) in cards" :key="cardId">
-      <StatisticsInfoCard
+      <StatisticsCard
         :title="card.title"
         :status="card.status"
         :diff="card.diff"
