@@ -183,8 +183,10 @@ const incomeStatementChartOpt = {
   },
   colors: [
     function ({ dataPointIndex }) {
-      if ([0, 1, 3, 9, 11].includes(dataPointIndex))
+      if ([0, 1].includes(dataPointIndex))
         return colorMode.value === 'dark' ? colors.green[400] : colors.green[500]
+      else if ([3, 9, 11].includes(dataPointIndex))
+        return colorMode.value === 'dark' ? colors.blue[400] : colors.blue[500]
       else
         return colorMode.value === 'dark' ? colors.red[400] : colors.red[500]
     },
@@ -201,7 +203,7 @@ const incomeStatementChartOpt = {
       groups: [
         { title: 'Revenue', cols: 4 },
         { title: 'Expenses', cols: 5 },
-        { title: 'Profit', cols: 3 },
+        { title: 'Income', cols: 3 },
       ],
     },
   },
