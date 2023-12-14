@@ -40,5 +40,5 @@
     "jsonc",
     "yaml"
   ],
-  "eslint.codeActionsOnSave.mode": "problems"
+  "editor.formatOnSaveMode": "modificationsIfAvailable"
 }
