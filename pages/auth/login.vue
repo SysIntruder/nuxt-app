@@ -37,7 +37,7 @@ function onSubmit(evt) {
 </script>
 
 <template>
-  <AuthCardContainer>
+  <CommonAuthCard>
     <template #logo>
       <IconCSS name="i-simple-icons-nuxtdotjs" class="!h-20 !w-20 text-primary" />
     </template>
@@ -114,5 +114,5 @@ function onSubmit(evt) {
         </template>
       </UButton>
     </template>
-  </AuthCardContainer>
+  </CommonAuthCard>
 </template>

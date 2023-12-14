@@ -250,10 +250,6 @@ async function loadRecentActivities() {
   recentActivities.value = value
 }
 
-function formatDotNumber(num) {
-  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-}
-
 await loadCards()
 await loadProfitCharts()
 await loadProductsChart()
@@ -341,7 +337,7 @@ await loadRecentActivities()
 
   <div class="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-4 my-4">
     <template v-for="(card, cardId) in cards" :key="cardId">
-      <DashboardInfoCard
+      <StatisticsInfoCard
         :title="card.title"
         :status="card.status"
         :diff="card.diff"

@@ -67,7 +67,7 @@ function changePassword() {
 </script>
 
 <template>
-  <AuthCardContainer>
+  <CommonAuthCard>
     <template #logo>
       <IconCSS name="i-simple-icons-nuxtdotjs" class="!h-20 !w-20 text-primary" />
     </template>
@@ -149,5 +149,5 @@ function changePassword() {
         <UIcon name="i-heroicons-check-circle-solid" class="h-40 w-40 bg-primary" />
       </div>
     </template>
-  </AuthCardContainer>
+  </CommonAuthCard>
 </template>

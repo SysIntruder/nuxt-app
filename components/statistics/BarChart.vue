@@ -30,6 +30,7 @@ const defaultOpt = ref({
   plotOptions: {
     bar: {
       horizontal: true,
+      columnWidth: '80%',
       dataLabels: {
         position: 'top',
       },
