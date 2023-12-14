@@ -229,7 +229,7 @@ await loadRecentActivities()
 </script>
 
 <template>
-  <div class="sticky top-0 z-[100] m-2">
+  <div class="sticky top-0 z-10 mx-2 my-4">
     <UCard>
       <div class="flex flex-col lg:flex-row items-center">
         <div class="w-full lg:w-[18vw] my-4 lg:my-0">
