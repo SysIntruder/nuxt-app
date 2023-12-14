@@ -87,7 +87,7 @@ const profileItems = [
           <UButton icon="i-heroicons-language" color="gray" variant="link" :ui="{ rounded: 'rounded-full' }" />
           <UDropdown
             :items="profileItems"
-            :ui="{ item: { disabled: 'cursor-text select-text opacity-1' } }"
+            :ui="{ container: 'z-30 group', item: { disabled: 'cursor-text select-text opacity-1' } }"
             :popper="{ placement: 'bottom-start' }"
           >
             <UButton color="gray" trailing-icon="i-heroicons-chevron-down" variant="ghost">
@@ -119,7 +119,7 @@ const profileItems = [
         </div>
       </div>
 
-      <div class="relative py-2 overflow-auto">
+      <div class="relative py-4 overflow-auto">
         <slot />
       </div>
     </div>
