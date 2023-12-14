@@ -51,13 +51,19 @@ const productOptions = [
 
 const typeFilter = ref([])
 const typeOptions = [
-  'Ultra Great Hammer',
   'Straight Sword',
   'Great Sword',
+  'Ultra Great Sword',
+  'Curved Sword',
+  'Great Curved Sword',
+  'Hammer',
+  'Great Hammer',
+  'Ultra Great Hammer',
   'Katana',
   'Daggers',
-  'Hammer',
   'Spear',
+  'Bow',
+  'Crossbow',
   'Shield',
 ]
 
@@ -91,6 +97,10 @@ const profitChartOpt = {
     formatter(val) {
       return val ? `$${formatDotNumber(val)} M` : ''
     },
+    background: {
+      padding: 6,
+      foreColor: colorMode.value === 'dark' ? colors.white : colors.slate[950],
+    },
   },
   xaxis: {
     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -123,8 +133,8 @@ const productsChartOpt = {
     formatter(val) {
       return val ? `$${formatDotNumber(val)} M` : ''
     },
-    style: {
-      colors: [colorMode.value === 'dark' ? colors.white : colors.slate[950]],
+    background: {
+      foreColor: colorMode.value === 'dark' ? colors.slate[950] : colors.white,
     },
   },
   xaxis: {
@@ -167,8 +177,8 @@ const incomeStatementChartOpt = {
 
       return val ? `$${formatDotNumber(val)} M` : ''
     },
-    style: {
-      colors: [colorMode.value === 'dark' ? colors.white : colors.slate[950]],
+    background: {
+      foreColor: colorMode.value === 'dark' ? colors.slate[950] : colors.white,
     },
   },
   colors: [
@@ -219,71 +229,75 @@ await loadRecentActivities()
 </script>
 
 <template>
-  <div class="grid m-2">
+  <div class="sticky top-0 z-[100] m-2">
     <UCard>
-      <div class="flex items-center">
-        <UPopover :popper="{ placement: 'bottom-start' }">
-          <UFormGroup label="Time period" class="mr-2">
-            <UInput readonly :value="dateRangeFilterLabel" icon="i-heroicons-calendar" class="w-[18vw]" />
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="w-full lg:w-[18vw] my-4 lg:my-0">
+          <UPopover :popper="{ placement: 'bottom-start' }">
+            <UFormGroup label="Time period" class="lg:mr-2 w-full">
+              <UInput readonly :value="dateRangeFilterLabel" icon="i-heroicons-calendar" />
+            </UFormGroup>
+
+            <template #panel="{ close }">
+              <LazyFormDatePicker v-model.range="dateRangeFilter" @close="close" />
+            </template>
+          </UPopover>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-center lg:justify-start items-center w-full lg:w-[auto] my-4 lg:my-0">
+          <UFormGroup label="Products Filter" class="w-full md:w-auto my-2 md:my-0 md:mr-2">
+            <USelectMenu
+              v-model="productFilter"
+              :options="productOptions"
+              multiple
+              placeholder="Filter by Products"
+              class="md:w-[17vw] lg:w-[15vw]"
+              :popper="{ strategy: 'fixed' }"
+              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+            />
           </UFormGroup>
 
-          <template #panel="{ close }">
-            <LazyFormDatePicker v-model.range="dateRangeFilter" @close="close" />
-          </template>
-        </UPopover>
+          <UFormGroup label="Type Filter" class="w-full md:w-auto my-2 md:my-0 md:mx-2">
+            <USelectMenu
+              v-model="typeFilter"
+              :options="typeOptions"
+              multiple
+              placeholder="Filter by Types"
+              class="md:w-[17vw] lg:w-[15vw]"
+              :popper="{ strategy: 'fixed' }"
+              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+            />
+          </UFormGroup>
 
-        <UFormGroup label="Products Filter" class="mx-2">
-          <USelectMenu
-            v-model="productFilter"
-            :options="productOptions"
-            multiple
-            placeholder="Filter by Products"
-            class="w-[15vw]"
-            :popper="{ strategy: 'fixed' }"
-            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
-          />
-        </UFormGroup>
+          <UFormGroup label="Vendor Filter" class="w-full md:w-auto my-2 md:my-0 md:mx-2">
+            <USelectMenu
+              v-model="vendorFilter"
+              :options="vendorOptions"
+              multiple
+              placeholder="Filter by Vendors"
+              class="md:w-[17vw] lg:w-[15vw]"
+              :popper="{ strategy: 'fixed' }"
+              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+            />
+          </UFormGroup>
 
-        <UFormGroup label="Type Filter" class="mx-2">
-          <USelectMenu
-            v-model="typeFilter"
-            :options="typeOptions"
-            multiple
-            placeholder="Filter by Types"
-            class="w-[15vw]"
-            :popper="{ strategy: 'fixed' }"
-            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
-          />
-        </UFormGroup>
-
-        <UFormGroup label="Vendor Filter" class="mx-2">
-          <USelectMenu
-            v-model="vendorFilter"
-            :options="vendorOptions"
-            multiple
-            placeholder="Filter by Vendors"
-            class="w-[15vw]"
-            :popper="{ strategy: 'fixed' }"
-            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
-          />
-        </UFormGroup>
-
-        <UFormGroup label="Customer Filter" class="mx-2">
-          <USelectMenu
-            v-model="customerFilter"
-            :options="customerOptions"
-            multiple
-            placeholder="Filter by Customers"
-            class="w-[15vw]"
-            :popper="{ strategy: 'fixed' }"
-            :ui-menu="{ width: 'w-[15vw]', height: 'max-h-[20vh]' }"
-          />
-        </UFormGroup>
+          <UFormGroup label="Customer Filter" class="w-full md:w-auto my-2 md:my-0 md:ml-2">
+            <USelectMenu
+              v-model="customerFilter"
+              :options="customerOptions"
+              multiple
+              placeholder="Filter by Customers"
+              class="md:w-[17vw] lg:w-[15vw]"
+              :popper="{ strategy: 'fixed' }"
+              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+            />
+          </UFormGroup>
+        </div>
       </div>
     </UCard>
   </div>
 
-  <div class="grid grid-cols-5">
+  <div class="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6">
     <template v-for="(card, cardId) in cards" :key="cardId">
       <DashboardInfoCard
         :title="card.title"
@@ -296,8 +310,8 @@ await loadRecentActivities()
     </template>
   </div>
 
-  <div class="grid grid-cols-5">
-    <UCard class="col-span-3 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+  <div class="grid grid-cols-6">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-4 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Revenues, Expenses, & Profits</span>
@@ -310,7 +324,7 @@ await loadRecentActivities()
       <LazyStatisticsLineChart :options="profitChartOpt" :series="toRaw(profitCharts)" :height="400" />
     </UCard>
 
-    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Monthly Products Sales</span>
@@ -324,8 +338,8 @@ await loadRecentActivities()
     </UCard>
   </div>
 
-  <div class="grid grid-cols-5">
-    <UCard class="col-span-3 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+  <div class="grid grid-cols-6">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-4 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Income Statement</span>
@@ -338,7 +352,7 @@ await loadRecentActivities()
       <LazyStatisticsRangeBarChart :options="incomeStatementChartOpt" :series="toRaw(incomeStatementCharts)" :height="400" />
     </UCard>
 
-    <UCard class="col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Recent Activities</span>

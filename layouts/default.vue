@@ -31,9 +31,9 @@ const profileItems = [
 </script>
 
 <template>
-  <div class="flex p-2 h-[100vh] bg-gray-100 dark:bg-gray-950">
+  <div class="flex py-4 px-2 h-[100vh] bg-gray-200 dark:bg-gray-950">
     <div
-      class="py-2 px-4 mr-2 rounded-sm bg-gray-50 dark:bg-gray-900 transition-all"
+      class="py-2 px-4 mr-4 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow transition-all"
       :class="{
         'min-w-[12vw]': !sidenavCollapsed,
         'transition-expand-sidenav': !sidenavCollapsed,
@@ -58,7 +58,7 @@ const profileItems = [
     </div>
 
     <div class="flex flex-col w-full h-full">
-      <div class="flex items-center justify-between py-2 px-4 rounded-sm bg-gray-50 dark:bg-gray-900">
+      <div class="flex items-center justify-between py-2 px-4 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow">
         <div class="flex items-center gap-2">
           <UButton
             icon="i-heroicons-bars-3"
@@ -118,7 +118,8 @@ const profileItems = [
           </UDropdown>
         </div>
       </div>
-      <div class="py-4 px-2 overflow-auto">
+
+      <div class="relative py-2 overflow-auto">
         <slot />
       </div>
     </div>

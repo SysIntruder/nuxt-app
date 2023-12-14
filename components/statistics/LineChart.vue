@@ -32,8 +32,9 @@ const defaultOpt = ref({
     : [colors.green[500], colors.red[500], colors.blue[500]],
   dataLabels: {
     enabled: true,
+    padding: 6,
     background: {
-      foreColor: colorMode.value === 'dark' ? colors.slate[950] : colors.white,
+      foreColor: colorMode.value === 'dark' ? colors.white : colors.slate[950],
     },
   },
   stroke: {
@@ -74,7 +75,7 @@ watch(colorMode, (newColorMode) => {
       : [colors.green[500], colors.red[500], colors.blue[500]],
     dataLabels: {
       background: {
-        foreColor: colorMode.value === 'dark' ? colors.slate[950] : colors.white,
+        foreColor: colorMode.value === 'dark' ? colors.white : colors.slate[950],
       },
     },
   })
