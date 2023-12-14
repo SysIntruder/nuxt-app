@@ -12,7 +12,6 @@ const props = defineProps({
 const emit = defineEmits(['update:model-value', 'close'])
 
 const colorMode = useColorMode()
-
 const isDark = computed(() => colorMode.value === 'dark')
 
 const date = computed({
@@ -31,8 +30,6 @@ const date = computed({
     borderless
     color="green"
     :is-dark="isDark"
-    title-position="left"
     trim-weeks
-    :first-day-of-week="2"
   />
 </template>

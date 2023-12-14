@@ -4,7 +4,7 @@ const { title, status, diff, percentage, total, currency } = props
 </script>
 
 <template>
-  <UCard class="m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+  <UCard :ui="{ header: { padding: 'p-2 sm:px-6' } }">
     <template #header>
       <div class="flex justify-between items-center">
         <span class="text-lg truncate opacity-75">{{ title }}</span>

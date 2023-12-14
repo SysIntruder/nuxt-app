@@ -33,6 +33,37 @@ const dateRangeFilterLabel = computed(() => {
 
   return `${start} - ${end}`
 })
+function selectThisYear() {
+  const now = new Date()
+  dateRangeFilter.value = {
+    start: new Date(now.getFullYear(), 0, 1),
+    end: new Date(now.getFullYear(), 11, 31),
+  }
+}
+function selectThisMonth() {
+  const now = new Date()
+  dateRangeFilter.value = {
+    start: new Date(now.getFullYear(), now.getMonth(), 1),
+    end: new Date(now.getFullYear(), now.getMonth() + 1, 0),
+  }
+}
+function selectThisWeek() {
+  const now = new Date()
+  const first = now.getDate() - now.getDay()
+  const last = first + 6
+  dateRangeFilter.value = {
+    start: new Date(now.setDate(first)),
+    end: new Date(now.setDate(last)),
+  }
+}
+function selectLastNDays(num) {
+  const now = new Date()
+  const first = now.getDate() - (num - 1)
+  dateRangeFilter.value = {
+    start: new Date(now.setDate(first)),
+    end: new Date(),
+  }
+}
 
 const productFilter = ref([])
 const productOptions = [
@@ -231,7 +262,7 @@ await loadRecentActivities()
 </script>
 
 <template>
-  <div class="sticky top-0 z-10 mx-2 my-4">
+  <div class="sticky top-0 z-20 mb-8">
     <UCard>
       <div class="flex flex-col lg:flex-row items-center">
         <div class="w-full lg:w-[18vw] my-4 lg:my-0">
@@ -241,7 +272,16 @@ await loadRecentActivities()
             </UFormGroup>
 
             <template #panel="{ close }">
-              <LazyFormDatePicker v-model.range="dateRangeFilter" @close="close" />
+              <div class="flex">
+                <div class="flex flex-col py-2 px-2 pr-3 w-[125px]">
+                  <UButton color="gray" label="This year" class="my-1" @click="selectThisYear" />
+                  <UButton color="gray" label="This month" class="my-1" @click="selectThisMonth" />
+                  <UButton color="gray" label="This week" class="my-1" @click="selectThisWeek" />
+                  <UButton color="gray" label="Last 7 days" class="my-1" @click="selectLastNDays(7)" />
+                  <UButton color="gray" label="Last 30 days" class="my-1" @click="selectLastNDays(30)" />
+                </div>
+                <FormDatePicker v-model.range="dateRangeFilter" shortcut @close="close" />
+              </div>
             </template>
           </UPopover>
         </div>
@@ -252,7 +292,7 @@ await loadRecentActivities()
               v-model="productFilter"
               :options="productOptions"
               multiple
-              placeholder="Filter by Products"
+              placeholder="Select products"
               class="md:w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
               :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
@@ -264,7 +304,7 @@ await loadRecentActivities()
               v-model="typeFilter"
               :options="typeOptions"
               multiple
-              placeholder="Filter by Types"
+              placeholder="Select types"
               class="md:w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
               :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
@@ -276,7 +316,7 @@ await loadRecentActivities()
               v-model="vendorFilter"
               :options="vendorOptions"
               multiple
-              placeholder="Filter by Vendors"
+              placeholder="Select vendors"
               class="md:w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
               :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
@@ -288,7 +328,7 @@ await loadRecentActivities()
               v-model="customerFilter"
               :options="customerOptions"
               multiple
-              placeholder="Filter by Customers"
+              placeholder="Select customers"
               class="md:w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
               :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
@@ -299,7 +339,7 @@ await loadRecentActivities()
     </UCard>
   </div>
 
-  <div class="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6">
+  <div class="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-4 my-4">
     <template v-for="(card, cardId) in cards" :key="cardId">
       <DashboardInfoCard
         :title="card.title"
@@ -312,8 +352,8 @@ await loadRecentActivities()
     </template>
   </div>
 
-  <div class="grid grid-cols-6">
-    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-4 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+  <div class="grid grid-cols-6 gap-4 my-4">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-4" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Revenues, Expenses, & Profits</span>
@@ -326,7 +366,7 @@ await loadRecentActivities()
       <LazyStatisticsLineChart :options="profitChartOpt" :series="toRaw(profitCharts)" :height="400" />
     </UCard>
 
-    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Monthly Products Sales</span>
@@ -340,8 +380,8 @@ await loadRecentActivities()
     </UCard>
   </div>
 
-  <div class="grid grid-cols-6">
-    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-4 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+  <div class="grid grid-cols-6 gap-4 my-4">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-4" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Income Statement</span>
@@ -354,7 +394,7 @@ await loadRecentActivities()
       <LazyStatisticsRangeBarChart :options="incomeStatementChartOpt" :series="toRaw(incomeStatementCharts)" :height="400" />
     </UCard>
 
-    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-2 m-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
+    <UCard class="col-span-6 lg:col-span-3 2xl:col-span-2" :ui="{ header: { padding: 'p-2 sm:px-6' } }">
       <template #header>
         <div class="flex justify-between">
           <span class="text-lg truncate opacity-75">Recent Activities</span>
