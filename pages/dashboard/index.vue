@@ -261,14 +261,14 @@ await loadRecentActivities()
 </script>
 
 <template>
-  <Teleport v-if="breakpoint.gte('md')" to="#page-title">
+  <Teleport v-if="breakpoint.gte('sm')" to="#page-title">
     <span class="text-lg font-medium mr-4">Dashboard</span>
   </Teleport>
 
   <div class="sticky top-0 z-20 mb-8">
     <UCard>
       <div class="flex flex-col lg:flex-row items-center">
-        <div class="w-full lg:w-[18vw] mb-4 md:mb-0">
+        <div class="w-full lg:w-[18vw] lg:mr-2 mb-4 md:mb-0">
           <UPopover :popper="{ placement: 'bottom-start' }">
             <UFormGroup label="Time period" class="lg:mr-2 w-full">
               <UInput readonly :value="dateRangeFilterLabel" icon="i-heroicons-calendar" />

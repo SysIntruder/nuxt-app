@@ -1,5 +1,5 @@
 <script setup>
-const sidenavCollapsed = ref(false)
+const sidenavCollapsed = ref(true)
 const search = ref(null)
 
 const breakpoint = useBreakpoint()
@@ -35,61 +35,78 @@ const profileItems = [
 <template>
   <div class="flex py-4 px-2 h-[100vh] overflow-x-hidden bg-gray-200 dark:bg-gray-950">
     <div
-      class="py-2 px-4 mr-4 rounded-md bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow transition-all"
+      class="mr-2 lg:mr-4 z-30"
       :class="{
-        'min-w-[12vw]': !sidenavCollapsed,
-        'transition-expand-sidenav': !sidenavCollapsed,
-        'min-w-[72px]': sidenavCollapsed,
-        'transition-collapse-sidenav': sidenavCollapsed,
+        'absolute h-[-webkit-fill-available] h-[-moz-available] mb-4': breakpoint.lt('md'),
+        'w-[-webkit-fill-available] w-[-moz-available]': !sidenavCollapsed && breakpoint.lt('md'),
+        'hidden w-0': sidenavCollapsed && breakpoint.lt('md'),
+        // 'transition-expand-mobile-sidenav': !sidenavCollapsed && breakpoint.lt('md'),
+        // 'transition-collapse-mobile-sidenav': sidenavCollapsed && breakpoint.lt('md'),
+
+        'min-w-[12vw]': !sidenavCollapsed && breakpoint.gte('lg'),
+        // 'transition-expand-sidenav': !sidenavCollapsed && breakpoint.gte('lg'),
+        'min-w-[72px]': sidenavCollapsed && breakpoint.gte('lg'),
+        // 'transition-collapse-sidenav': sidenavCollapsed && breakpoint.gte('lg'),
       }"
     >
-      <div class="flex flex-col justify-between h-full">
-        <div>
-          <div :class="`flex ${!sidenavCollapsed && breakpoint.gte('lg') ? 'flex-row justify-between' : 'flex-col justify-center'} items-center my-4`">
-            <CommonLogoText v-if="!sidenavCollapsed && breakpoint.gte('lg')" />
-            <CommonLogo v-else />
+      <div class="py-2 px-4 h-full rounded-md bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow">
+        <div class="flex flex-col justify-between h-full">
+          <div>
+            <div class="flex flex-row justify-between items-center my-4">
+              <CommonLogoText v-if="(!sidenavCollapsed && breakpoint.gte('lg')) || breakpoint.lt('md')" />
+              <CommonLogo v-else />
 
-            <span v-if="!sidenavCollapsed && breakpoint.gte('lg')" class="text-xs opacity-75">v1.0.0</span>
-          </div>
+              <span v-if="!sidenavCollapsed && breakpoint.gte('lg')" class="text-xs opacity-75">v1.0.0</span>
+              <UButton
+                v-if="!sidenavCollapsed && breakpoint.lt('md')"
+                color="gray"
+                variant="ghost"
+                icon="i-heroicons-x-mark"
+                class="-my-1"
+                :ui="{ rounded: 'rounded-full' }"
+                @click="sidenavCollapsed = true"
+              />
+            </div>
 
-          <div v-for="(link, linkId) in toRaw(navLinks)" :key="`nav-${linkId}`">
-            <UDivider class="my-2" />
-            <UVerticalNavigation v-if="!sidenavCollapsed" :links="link">
-              <template #icon="{ link: l }">
-                <IconCSS :name="l.icon" class="!h-4 !w-4" />
-              </template>
-            </UVerticalNavigation>
-            <div v-else class="flex flex-col">
-              <UTooltip
-                v-for="(l, lId) in link"
-                :key="`nav-${linkId}-${lId}`"
-                :text="l.label"
-                :popper="{ placement: 'right' }"
-                class="text-md"
-              >
-                <UButton
-                  :to="l.to"
-                  class="px-3 py-2 my-1 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white bg-gray-50 dark:bg-gray-900 hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
-                  active-class="
-                  text-primary-500 dark:text-primary-400
-                  hover:!text-primary-500 dark:hover:!text-primary-400
-                  bg-primary-300/50 dark:bg-primary-800/50
-                  hover:!bg-primary-300/50 dark:hover:!bg-primary-800/50
-                "
-                  variant="ghost"
+            <div v-for="(link, linkId) in toRaw(navLinks)" :key="`nav-${linkId}`">
+              <UDivider class="my-2" />
+              <UVerticalNavigation v-if="!sidenavCollapsed" :links="link">
+                <template #icon="{ link: l }">
+                  <IconCSS :name="l.icon" class="!h-4 !w-4" />
+                </template>
+              </UVerticalNavigation>
+              <div v-else class="flex flex-col">
+                <UTooltip
+                  v-for="(l, lId) in link"
+                  :key="`nav-${linkId}-${lId}`"
+                  :text="l.label"
+                  :popper="{ placement: 'right' }"
+                  class="text-md"
                 >
-                  <template #leading>
-                    <IconCSS :name="l.icon" class="!h-4 !w-4" />
-                  </template>
-                </UButton>
-              </UTooltip>
+                  <UButton
+                    :to="l.to"
+                    class="px-3 py-2 my-1 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white bg-gray-50 dark:bg-gray-900 hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
+                    active-class="
+                    text-primary-500 dark:text-primary-400
+                    hover:!text-primary-500 dark:hover:!text-primary-400
+                    bg-primary-300/50 dark:bg-primary-800/50
+                    hover:!bg-primary-300/50 dark:hover:!bg-primary-800/50
+                  "
+                    variant="ghost"
+                  >
+                    <template #leading>
+                      <IconCSS :name="l.icon" class="!h-4 !w-4" />
+                    </template>
+                  </UButton>
+                </UTooltip>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="text-xs text-center opacity-75">
-          <span v-if="!sidenavCollapsed">
-            &copy; 2023 NuxtApp.
-          </span>
+          <div class="text-xs text-center opacity-75">
+            <span v-if="!sidenavCollapsed">
+              &copy; 2023 NuxtApp.
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -173,7 +190,9 @@ const profileItems = [
         min-width: 12vw;
     }
 }
-
+.transition-expand-sidenav {
+    animation: expandSidenav 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
 @keyframes collapseSidenav {
     from {
         min-width: 12vw;
@@ -183,12 +202,38 @@ const profileItems = [
         min-width: 72px;
     }
 }
-
-.transition-expand-sidenav {
-    animation: expandSidenav 0.3s ease-out;
+.transition-collapse-sidenav {
+    animation: collapseSidenav 0.3s cubic-bezier(0.4, 0, 1, 1);
 }
 
-.transition-collapse-sidenav {
-    animation: collapseSidenav 0.3s ease-out;
+@keyframes expandMobileSidenav {
+  from {
+    width: 0px;
+    display: none;
+  }
+
+  to {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    display: block;
+  }
+}
+.transition-expand-mobile-sidenav {
+    animation: expandMobileSidenav 0.5s cubic-bezier(0.4, 0, 1, 1);
+}
+@keyframes collapseMobileSidenav {
+    from {
+      width: -webkit-fill-available;
+      width: -moz-available;
+      display: block;
+    }
+
+    to {
+      width: 0px;
+      display: none;
+    }
+}
+.transition-collapse-mobile-sidenav {
+    animation: collapseMobileSidenav 0.5s cubic-bezier(0.4, 0, 1, 1);
 }
 </style>
