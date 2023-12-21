@@ -173,7 +173,7 @@ const profileItems = [
         </div>
       </div>
 
-      <div class="relative py-4 overflow-auto">
+      <div class="relative py-4 pr-3 lg:pr-4 overflow-auto">
         <slot />
       </div>
     </div>
