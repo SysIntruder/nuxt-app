@@ -2,6 +2,8 @@
 const sidenavCollapsed = ref(false)
 const search = ref(null)
 
+const breakpoint = useBreakpoint()
+
 const colorMode = useColorMode()
 const isDark = computed({
   get() {
@@ -15,9 +17,9 @@ const isDark = computed({
 const { data: { value: navLinks } } = await useFetch('/api/menu')
 const profileItems = [
   [{
-    label: 'Logged In User',
-    sublabel: 'user\'s role',
-    avatar: 'https://avatars.githubusercontent.com/u/80736513?v=4',
+    label: 'Elysia',
+    sublabel: '2nd Flame Chaser',
+    avatar: './img/avatar-ely.png',
     slot: 'account',
     disabled: true,
   }],
@@ -31,9 +33,9 @@ const profileItems = [
 </script>
 
 <template>
-  <div class="flex py-4 px-2 h-[100vh] bg-gray-200 dark:bg-gray-950">
+  <div class="flex py-4 px-2 h-[100vh] overflow-x-hidden bg-gray-200 dark:bg-gray-950">
     <div
-      class="py-2 px-4 mr-4 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow transition-all"
+      class="py-2 px-4 mr-4 rounded-md bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow transition-all"
       :class="{
         'min-w-[12vw]': !sidenavCollapsed,
         'transition-expand-sidenav': !sidenavCollapsed,
@@ -43,12 +45,14 @@ const profileItems = [
     >
       <div class="flex flex-col justify-between h-full">
         <div>
-          <div :class="`flex ${sidenavCollapsed ? 'justify-center' : 'justify-between'} items-center my-4`">
-            <CommonLogo />
-            <span v-if="!sidenavCollapsed" class="text-xs opacity-75">v1.0.0</span>
+          <div :class="`flex ${!sidenavCollapsed && breakpoint.gte('lg') ? 'flex-row justify-between' : 'flex-col justify-center'} items-center my-4`">
+            <CommonLogoText v-if="!sidenavCollapsed && breakpoint.gte('lg')" />
+            <CommonLogo v-else />
+
+            <span v-if="!sidenavCollapsed && breakpoint.gte('lg')" class="text-xs opacity-75">v1.0.0</span>
           </div>
 
-          <div v-for="(link, linkId) in navLinks" :key="`nav-${linkId}`">
+          <div v-for="(link, linkId) in toRaw(navLinks)" :key="`nav-${linkId}`">
             <UDivider class="my-2" />
             <UVerticalNavigation v-if="!sidenavCollapsed" :links="link">
               <template #icon="{ link: l }">
@@ -66,13 +70,12 @@ const profileItems = [
                 <UButton
                   :to="l.to"
                   class="px-3 py-2 my-1 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white bg-gray-50 dark:bg-gray-900 hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
-
-                  :active-class="[
-                    'text-primary-500 dark:text-primary-400',
-                    'hover:!text-primary-500 dark:hover:!text-primary-400',
-                    'bg-primary-300/50 dark:bg-primary-800/50',
-                    'hover:!bg-primary-300/50 dark:hover:!bg-primary-800/50',
-                  ]"
+                  active-class="
+                  text-primary-500 dark:text-primary-400
+                  hover:!text-primary-500 dark:hover:!text-primary-400
+                  bg-primary-300/50 dark:bg-primary-800/50
+                  hover:!bg-primary-300/50 dark:hover:!bg-primary-800/50
+                "
                   variant="ghost"
                 >
                   <template #leading>
@@ -92,7 +95,7 @@ const profileItems = [
     </div>
 
     <div class="flex flex-col w-full h-full">
-      <div class="flex items-center justify-between py-2 px-4 rounded-lg bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow">
+      <div class="flex items-center justify-between py-2 px-4 rounded-md bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800 shadow">
         <div class="flex items-center gap-2">
           <UButton
             icon="i-heroicons-bars-3"
@@ -101,7 +104,7 @@ const profileItems = [
             :ui="{ rounded: 'rounded-full' }"
             @click="sidenavCollapsed = !sidenavCollapsed"
           />
-          <CommonLogoText />
+          <div id="page-title" />
         </div>
         <div class="flex items-center gap-2">
           <UInput v-model="search" icon="i-heroicons-magnifying-glass" placeholder="Search..." />
@@ -126,7 +129,7 @@ const profileItems = [
           >
             <UButton color="gray" trailing-icon="i-heroicons-chevron-down" variant="ghost">
               <template #leading>
-                <UAvatar src="https://avatars.githubusercontent.com/u/80736513?v=4" size="sm" />
+                <UAvatar src="./img/avatar-ely.png" size="sm" />
               </template>
             </UButton>
             <template #account="{ item }">

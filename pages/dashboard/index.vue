@@ -5,6 +5,7 @@ useHead({
   title: 'Dashboard',
 })
 
+const breakpoint = useBreakpoint()
 const colorMode = useColorMode()
 
 const dateRangeFilter = ref({
@@ -64,6 +65,8 @@ function selectLastNDays(num) {
     end: new Date(),
   }
 }
+
+const mobileFilterModal = ref(false)
 
 const productFilter = ref([])
 const productOptions = [
@@ -258,10 +261,14 @@ await loadRecentActivities()
 </script>
 
 <template>
+  <Teleport v-if="breakpoint.gte('md')" to="#page-title">
+    <span class="text-lg font-medium mr-4">Dashboard</span>
+  </Teleport>
+
   <div class="sticky top-0 z-20 mb-8">
     <UCard>
       <div class="flex flex-col lg:flex-row items-center">
-        <div class="w-full lg:w-[18vw] my-4 lg:my-0">
+        <div class="w-full lg:w-[18vw] mb-4 md:mb-0">
           <UPopover :popper="{ placement: 'bottom-start' }">
             <UFormGroup label="Time period" class="lg:mr-2 w-full">
               <UInput readonly :value="dateRangeFilterLabel" icon="i-heroicons-calendar" />
@@ -282,55 +289,119 @@ await loadRecentActivities()
           </UPopover>
         </div>
 
-        <div class="flex flex-col md:flex-row justify-center lg:justify-start items-center w-full lg:w-[auto] my-4 lg:my-0">
-          <UFormGroup label="Products Filter" class="w-full md:w-auto my-2 md:my-0 md:mr-2">
+        <div v-if="breakpoint.gte('md')" class="flex flex-row justify-center lg:justify-start items-center w-full lg:w-[auto] mt-4 lg:mt-0">
+          <UFormGroup label="Products Filter" class="w-auto my-0 mr-2">
             <USelectMenu
               v-model="productFilter"
               :options="productOptions"
               multiple
               placeholder="Select products"
-              class="md:w-[17vw] lg:w-[15vw]"
+              class="w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
-              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+              :ui-menu="{ width: 'w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
             />
           </UFormGroup>
 
-          <UFormGroup label="Type Filter" class="w-full md:w-auto my-2 md:my-0 md:mx-2">
+          <UFormGroup label="Type Filter" class="w-auto my-0 mx-2">
             <USelectMenu
               v-model="typeFilter"
               :options="typeOptions"
               multiple
               placeholder="Select types"
-              class="md:w-[17vw] lg:w-[15vw]"
+              class="w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
-              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+              :ui-menu="{ width: 'w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
             />
           </UFormGroup>
 
-          <UFormGroup label="Vendor Filter" class="w-full md:w-auto my-2 md:my-0 md:mx-2">
+          <UFormGroup label="Vendor Filter" class="w-auto my-0 mx-2">
             <USelectMenu
               v-model="vendorFilter"
               :options="vendorOptions"
               multiple
               placeholder="Select vendors"
-              class="md:w-[17vw] lg:w-[15vw]"
+              class="w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
-              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+              :ui-menu="{ width: 'w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
             />
           </UFormGroup>
 
-          <UFormGroup label="Customer Filter" class="w-full md:w-auto my-2 md:my-0 md:ml-2">
+          <UFormGroup label="Customer Filter" class="w-auto my-0 ml-2">
             <USelectMenu
               v-model="customerFilter"
               :options="customerOptions"
               multiple
               placeholder="Select customers"
-              class="md:w-[17vw] lg:w-[15vw]"
+              class="w-[17vw] lg:w-[15vw]"
               :popper="{ strategy: 'fixed' }"
-              :ui-menu="{ width: 'max-w-[75vw] md:w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
+              :ui-menu="{ width: 'w-[17vw] lg:w-[15vw]', height: 'max-h-[20vh]' }"
             />
           </UFormGroup>
         </div>
+
+        <template v-else>
+          <UButton label="Open Filter" icon="i-heroicons-funnel" block @click="mobileFilterModal = true" />
+
+          <UModal v-model="mobileFilterModal" prevent-close>
+            <UCard>
+              <template #header>
+                <div class="flex items-center justify-between">
+                  <h3 class="flex items-center text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                    <UIcon name="i-heroicons-funnel" class="mr-2" />
+                    Select filters
+                  </h3>
+                  <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="mobileFilterModal = false" />
+                </div>
+              </template>
+
+              <div class="flex flex-col justify-center items-center w-full">
+                <UFormGroup label="Products Filter" class="w-full my-2">
+                  <USelectMenu
+                    v-model="productFilter"
+                    :options="productOptions"
+                    multiple
+                    placeholder="Select products"
+                    :popper="{ strategy: 'fixed' }"
+                    :ui-menu="{ width: 'max-w-[75vw]', height: 'max-h-[20vh]' }"
+                  />
+                </UFormGroup>
+
+                <UFormGroup label="Type Filter" class="w-full my-2">
+                  <USelectMenu
+                    v-model="typeFilter"
+                    :options="typeOptions"
+                    multiple
+                    placeholder="Select types"
+                    :popper="{ strategy: 'fixed' }"
+                    :ui-menu="{ width: 'max-w-[75vw]', height: 'max-h-[20vh]' }"
+                  />
+                </UFormGroup>
+
+                <UFormGroup label="Vendor Filter" class="w-full my-2">
+                  <USelectMenu
+                    v-model="vendorFilter"
+                    :options="vendorOptions"
+                    multiple
+                    placeholder="Select vendors"
+                    :popper="{ strategy: 'fixed' }"
+                    :ui-menu="{ width: 'max-w-[75vw]', height: 'max-h-[20vh]' }"
+                  />
+                </UFormGroup>
+
+                <UFormGroup label="Customer Filter" class="w-full my-2">
+                  <USelectMenu
+                    v-model="customerFilter"
+                    :options="customerOptions"
+                    multiple
+                    placeholder="Select customers"
+                    :popper="{ strategy: 'fixed' }"
+                    :ui-menu="{ width: 'max-w-[75vw]', height: 'max-h-[20vh]' }"
+                  />
+                </UFormGroup>
+              </div>
+            </UCard>
+          </UModal>
+        </template>
       </div>
     </UCard>
   </div>
