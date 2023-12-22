@@ -30,6 +30,12 @@ const profileItems = [
   [{ label: 'Try Enterprise', icon: 'i-heroicons-globe-alt', to: '', slot: 'special' }],
   [{ label: 'Logout', to: '/auth/login' }],
 ]
+
+const router = useRouter()
+watch(router.currentRoute, () => {
+  if (breakpoint.lt('md'))
+    sidenavCollapsed.value = true
+}, { immediate: true, deep: true })
 </script>
 
 <template>
@@ -87,11 +93,11 @@ const profileItems = [
                     :to="l.to"
                     class="px-3 py-2 my-1 text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white bg-gray-50 dark:bg-gray-900 hover:bg-gray-200/50 dark:hover:bg-gray-800/50"
                     active-class="
-                    text-primary-500 dark:text-primary-400
-                    hover:!text-primary-500 dark:hover:!text-primary-400
-                    bg-primary-300/50 dark:bg-primary-800/50
-                    hover:!bg-primary-300/50 dark:hover:!bg-primary-800/50
-                  "
+                      text-primary-500 dark:text-primary-400
+                      hover:!text-primary-500 dark:hover:!text-primary-400
+                      bg-primary-300/50 dark:bg-primary-800/50
+                      hover:!bg-primary-300/50 dark:hover:!bg-primary-800/50
+                    "
                     variant="ghost"
                   >
                     <template #leading>

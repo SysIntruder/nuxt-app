@@ -1,6 +1,6 @@
 <script setup>
 useHead({
-  title: 'Statistics',
+  title: 'Products',
 })
 
 const breakpoint = useBreakpoint()
@@ -8,8 +8,8 @@ const breakpoint = useBreakpoint()
 
 <template>
   <Teleport v-if="breakpoint.gte('sm')" to="#page-title">
-    <span class="text-lg font-medium mr-4">Statistics</span>
+    <span class="text-lg font-medium mr-4">Products</span>
   </Teleport>
   {{ breakpoint.is }}
-  Statistics
+  Products
 </template>
