@@ -2,12 +2,12 @@ export default defineEventHandler((_) => {
   return [
     [
       { label: 'Dashboard', icon: 'i-heroicons-squares-2x2', to: '/dashboard' },
-      { label: 'Statistics', icon: 'i-heroicons-chart-bar', to: '/statistics' },
+      { label: 'Statistics', icon: 'i-heroicons-chart-bar', to: '' },
       { label: 'Reports', icon: 'i-heroicons-clipboard-document-list', to: '' },
       { label: 'Maps', icon: 'i-heroicons-map', to: '' },
     ],
     [
-      { label: 'Products', icon: 'i-heroicons-cube', to: '' },
+      { label: 'Products', icon: 'i-heroicons-cube', to: '/products' },
       { label: 'Transactions', icon: 'i-heroicons-banknotes', to: '' },
       { label: 'Partners', icon: 'i-heroicons-users', to: '' },
     ],
